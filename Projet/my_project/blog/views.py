@@ -19,7 +19,6 @@ class UserPostWatchlist(ListView): #consulter les posts dans la watchlist
     model = Post
     template_name = 'blog/user_watchlist.html'
     context_object_name = 'posts'
-    ordering = ['-date_posted']  # permet d'afficher les posts du plus récent au plus ancien (grâce au '-' devant date_posted)
     paginate_by = 5  # nombre de posts qui vont être affichés sur une page
 
 
@@ -45,9 +44,10 @@ class UserPostListView(ListView): #affichage de tous les posts (home.html)
 class PostDetailView(DetailView): #quand on clique sur un post, le post va être afficher de manière bcp + détaillée
     model = Post
 
+
 class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'sell_rent' ,'price', 'content']
 
     def form_valid(self, form):
         form.instance.author = self.request.user #auteur du poste = l'utilisateur actuellement connecté
@@ -55,7 +55,7 @@ class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):  # création d'un post
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'sell_rent' ,'price','content']
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # auteur du poste = l'utilisateur actuellement connecté
