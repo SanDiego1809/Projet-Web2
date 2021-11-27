@@ -23,17 +23,26 @@
 <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Django Blog</a>
+            <!-- bouton 3 barres qd site en petit -->
             <button aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                     data-target="#navbarToggle" data-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
+                <!-- Navbar partie de gauche -->
                 <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
                     <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
                 </div>
-                <!-- Navbar Right Side -->
+
+                <div class="navbar-nav mx-auto">
+                     <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search for a place" aria-label="Search">
+                        <button class="btn btn-outline-info" type="submit">Search</button>
+                     </form>
+                </div>
+
+                <!-- Navbar partie droite -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
                         <a class="nav-item nav-link" href="{% url 'post-create' %}">New post</a>
@@ -62,6 +71,7 @@
         {% endif %}
       {% block content %}{% endblock %}
     </div>
+      <!-- Sidebar -->
     <div class="col-md-4">
       <div class="content-section">
         <h3>Our Sidebar</h3>
