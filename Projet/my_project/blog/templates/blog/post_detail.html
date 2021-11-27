@@ -4,6 +4,9 @@
         <!-- show the profile picture of the aunthors next to the posts-->
         <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
         <div class="media-body">
+            {% if user.is_authenticated and object.author != user %} <!-- si l'utilisateur est connecté -->
+                <a class="text-right btn btn-success btn-sm mt-1 mb-1" href="#" >Add to Watchlist</a>
+            {% endif %}
             <div class="article-metadata">
                 <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
                 <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
@@ -15,6 +18,8 @@
                 {% endif %}
             </div>
             <h2 class="article-title"> {{ object.title }}</h2>
+            <h5 class="article-content">Price : {{ object.price }} € </h5>
+            <h4 class="article-content">{{ object.get_sell_rent_display }}</h4>
             <p class="article-content">{{ object.content }}</p>
         </div>
 
