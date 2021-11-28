@@ -17,9 +17,9 @@
                     </div>
                 {% endif %}
             </div>
-            <h6 class="article-title"> {{ object.title }}</h6>
+            <h5 class="display-5">{{ object.title }}</h5>
             <h3 class="article-content">{{ object.price }} € </h3>
-            <h6 class="article-content">{{ object.get_sell_rent_display }}</h6>
+            <h5 class="article-content">{{ object.get_sell_rent_display }}</h5>
             <p class="article-content">{{ object.content }}</p>
         </div>
         <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
