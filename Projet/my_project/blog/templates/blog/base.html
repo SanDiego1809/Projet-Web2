@@ -49,6 +49,7 @@
                     {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
                         <a class="nav-item nav-link" href="{% url 'post-create' %}">New post</a>
                         <a class="nav-item nav-link" href="{% url 'user-watchlist' %}">Watchlist</a>
+                        <a class="nav-item nav-link" href="{% url 'user-myposts' %}">My posts</a>
                         <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                         <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                     {% else %} <!-- si l'utilisateur n'est pas connecté -->
