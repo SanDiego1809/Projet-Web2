@@ -14,9 +14,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
 
     {% if title%}
-    <title>Django - {{ title }}</title>
+        <title>Django - {{ title }}</title>
     {% else %}
-    <title>Django Default</title>
+        <title>Django Default</title>
     {% endif %}
 </head>
 <body>
@@ -69,7 +69,7 @@
                 </div>
             {% endfor %}
         {% endif %}
-      {% block content %}{% endblock %}
+      {% block content %} {% endblock %}
     </div>
       <!-- Sidebar -->
     <div class="col-md-4">
