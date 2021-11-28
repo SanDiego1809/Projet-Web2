@@ -14,4 +14,5 @@ urlpatterns = [
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'), #supprimer un post
     path('post/new/', PostCreateView.as_view(), name='post-create'), #creation d'un post
     path('about/', views.about, name='blog-about'), # localhost:8000/about/
+    path('place_search/', views.place_search, name='place-search'),#chercher un endroit
 ]
