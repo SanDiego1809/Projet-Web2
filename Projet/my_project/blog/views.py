@@ -21,8 +21,6 @@ class UserPostWatchlist(ListView): #consulter les posts dans la watchlist
     context_object_name = 'posts'
     paginate_by = 5  # nombre de posts qui vont être affichés sur une page
 
-
-
 class PostListView(ListView): #affichage de tous les posts (home.html)
     model = Post
     template_name = 'blog/home.html' # <app>/<model>_<viewtype>.html
@@ -45,10 +43,9 @@ class UserPostListView(ListView): #affichage de tous les posts (home.html)
 class PostDetailView(DetailView): #quand on clique sur un post, le post va être afficher de manière bcp + détaillée
     model = Post
 
-
 class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
     model = Post
-    fields = ['title', 'sell_rent' ,'price', 'content']
+    fields = ['title','sell_rent' ,'price', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user #auteur du poste = l'utilisateur actuellement connecté
@@ -56,7 +53,7 @@ class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):  # création d'un post
     model = Post
-    fields = ['title', 'sell_rent' ,'price','content']
+    fields = ['title', 'sell_rent' ,'price','content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # auteur du poste = l'utilisateur actuellement connecté

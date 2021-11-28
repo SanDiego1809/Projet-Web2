@@ -17,11 +17,11 @@
                     </div>
                 {% endif %}
             </div>
-            <h2 class="article-title"> {{ object.title }}</h2>
-            <h5 class="article-content">Price : {{ object.price }} € </h5>
-            <h4 class="article-content">{{ object.get_sell_rent_display }}</h4>
+            <h6 class="article-title"> {{ object.title }}</h6>
+            <h3 class="article-content">{{ object.price }} € </h3>
+            <h6 class="article-content">{{ object.get_sell_rent_display }}</h6>
             <p class="article-content">{{ object.content }}</p>
         </div>
-
+        <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
     </article>
 {% endblock content %}
