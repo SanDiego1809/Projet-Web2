@@ -11,7 +11,7 @@
 
             <div class="media-body">
                 {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
-                <a class="text-right btn btn-success btn-sm mt-1 mb-1" href="#" >Add to Watchlist</a>
+                    <button id="btnWatchList" class="text-right btn btn-success btn-sm mt-1 mb-1" onclick="watchList()">Add to Watchlist</button>
                 {% endif %}
 
                 <div class="article-metadata">
@@ -53,5 +53,14 @@
     {% endif %}
 
 <!-- FIN PAGINATION -->
+
+<!-- JavaScript -->
+<script>
+      function watchList()
+      {
+        document.getElementById("btnWatchList").innerHTML ="Added to watchlist";
+		document.getElementById("btnWatchList").style.background ="red";
+      }
+</script>
 
 {% endblock content %}
