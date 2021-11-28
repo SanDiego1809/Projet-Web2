@@ -35,9 +35,11 @@
                     <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
                 </div>
 
+                <!-- Navbar partie centrale -->
                 <div class="navbar-nav mx-auto">
-                     <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search for a place" aria-label="Search">
+                     <form class="d-flex" method=POST action="{% url 'place-search' %}">
+                        {% csrf_token %}
+                        <input class="form-control me-2" type="search" placeholder="Search for a place" aria-label="Search" name="search">
                         <button class="btn btn-outline-info" type="submit">Search</button>
                      </form>
                 </div>

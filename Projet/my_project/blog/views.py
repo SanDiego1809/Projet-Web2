@@ -78,8 +78,15 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView): #quan
             return True
         return False
 
+def place_search(request):# inspired by the video https://www.youtube.com/watch?v=AGtae4L5BbI&list=WL&index=33&t=913s
+    if request.method == "POST":
+        search = request.POST['search']
+        posts= Post.objects.filter(title__contains = search)
+        return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts})
+    else:
+        return render(request, 'blog/place_search.html', {})
 
 def about(request):
     # return HttpResponse('<h1>About Home</h1>')
-    return render(request, 'blog/about.html', {'title' : 'My About Page'})
+    return render(request,  'blog/about.html', {'title' : 'My About Page'})
 
