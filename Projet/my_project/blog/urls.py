@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView, UserPostWatchlist, UserMyPostsListView
+from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView, UserMyPostsListView
 from . import views # Le "." désigne le fichier courant
 
 
@@ -7,7 +7,8 @@ from . import views # Le "." désigne le fichier courant
 urlpatterns = [
     path('', PostListView.as_view(), name='blog-home'), # localhost:8000/blog/
     path('user/<str:username>/', UserPostListView.as_view(), name='user-posts'),  # localhost:8000/blog/
-    path('user/profile/watchlist', UserPostWatchlist.as_view(), name='user-watchlist'), #permet de consulter la watchlist
+    path('user/profile/add_post_in_watchlist/', views.add_post_in_watchlist, name='add-post-in-watchlist'), #permet d'ajouter une annonce dans la watchlist
+    path('user/profile/watchlist/', views.watchlist, name='user-watchlist'), #permet de consulter la watchlist
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'), #affiche les détails d'un post
     #pk = primary key --> exemple : post/1 = post avec l'id 1, le int: sert à dire que le pk est de type int afin d'éviter que qlq mette un string par exemple
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'), #modifier un post

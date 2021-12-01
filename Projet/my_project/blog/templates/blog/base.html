@@ -67,10 +67,11 @@
     <div class="col-md-8">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
+                <div class="alert alert-{{ message.tags }} m-2" id="message_id">
                     {{ message }}
                 </div>
             {% endfor %}
+
         {% endif %}
       {% block content %} {% endblock %}
     </div>
@@ -93,6 +94,15 @@
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script>
+    //ce script permet de faire disparaitre les messages affichés au bout de 3 secondes
+    var curr_message = document.getElementById('message_id');
+
+    setTimeout(function(){
+       curr_message.style.display = "none";
+    }, 3000);
+</script>
+
 <script crossorigin="anonymous"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>

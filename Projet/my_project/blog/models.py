@@ -24,17 +24,50 @@ class Post(models.Model): #creation d'un Post
 
         img = Image.open(self.image.path)
 
+        width, height = img.size
+
         # check if the current img is more thant 300 px (chosen by Corey Shafer)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)  # save the changes
+        # code pris : "https://pretagteam.com/question/django-image-compression-and-resize-not-working"
+        if height < width:
+
+            left = (width - height) / 2
+            right = (width + height) / 2
+            top = 0
+            bottom = height
+            img = img.crop((left, top, right, bottom))
+
+        elif width < height:
+
+            left = 0
+            right = width
+            top = 0
+            bottom = width
+            img = img.crop((left, top, right, bottom))
+
+        if width > 300 and height > 300:
+            img.thumbnail((300, 300))
+
+        img.save(self.image.path)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk' : self.pk}) #redirige vers la page "post-detail" et enregistre la clé primaire du nouveau post
+
+
+class Watchlist(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='watchlist_list')
+
+    def save(self, *args, **kwargs):
+        super(Watchlist, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.post}, {self.user}"
+
+
+
 
 
 

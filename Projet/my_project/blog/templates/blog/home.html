@@ -10,7 +10,11 @@
 
             <div class="media-body">
                 {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
-                <a class="text-right btn btn-success btn-sm mt-1 mb-1" href="#" >Add to Watchlist</a>
+                    <form method="POST"  action="{% url 'add-post-in-watchlist' %}">
+                      {% csrf_token %}
+                      <input hidden type="text" value="{{ post.id }}" name="post_id">
+                      <button id="btnFav" class="btn btn-outline-success m-1" type="submit">Favorite</button>
+                    </form>
                 {% endif %}
 
                 <div class="article-metadata">

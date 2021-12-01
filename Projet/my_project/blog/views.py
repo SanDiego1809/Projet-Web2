@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post, Watchlist
+from django.urls import reverse
+from django.contrib import messages
 
 # Fichier qui va contenir toutes les vues de notre application "blog"
 
@@ -14,12 +16,6 @@ def home(request):
         'posts' : Post.objects.all()
     }
     return render(request, 'blog/home.html', context) #requête en paramètre, nomDuRepertoire/nomDuTemplate
-
-class UserPostWatchlist(ListView): #consulter les posts dans la watchlist
-    model = Post
-    template_name = 'blog/user_watchlist.html'
-    context_object_name = 'posts'
-    paginate_by = 5  # nombre de posts qui vont être affichés sur une page
 
 class UserMyPostsListView(ListView): #affiche les posts dans "My Posts"
     model = Post
@@ -84,12 +80,39 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView): #quan
         return False
 
 def place_search(request):# inspired by the video https://www.youtube.com/watch?v=AGtae4L5BbI&list=WL&index=33&t=913s
-    if request.method == "POST":
+    if request.method == 'POST':
         search = request.POST['search']
         posts= Post.objects.filter(title__contains = search)
         return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts})
     else:
         return render(request, 'blog/place_search.html', {})
+
+def add_post_in_watchlist(request):
+
+    if request.method == 'POST':
+        if request.POST.get('post_id'):
+            post_id = request.POST.get('post_id') #je récupère l'id du post concerné
+            model = Watchlist()
+            model.post = Post.objects.filter(id = post_id).get()
+            model.user = request.user;
+
+            search_if_already_in_watchlist = Watchlist.objects.filter(post = model.post, user=model.user)
+
+            if len(search_if_already_in_watchlist) == 0: #si l'élément n'est pas dans la watchlist
+                model.save()
+                messages.success(request, 'Post successfully added to your watchlist !')
+            else:
+                messages.warning(request, 'This post is already in your watchlist...')
+
+            return HttpResponseRedirect(reverse('blog-home')) #afin d'aller sur la page home
+    else:
+        return render(request, 'blog/home.html')
+
+
+def watchlist(request):
+    curr_user = User.objects.filter(username=request.user.username).get() #utilisateur actuel
+    user_watchlist = curr_user.watchlist_list.all() #permet d'obtenir la watchlist de l'utilisateur en cours
+    return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist})
 
 def about(request):
     # return HttpResponse('<h1>About Home</h1>')
