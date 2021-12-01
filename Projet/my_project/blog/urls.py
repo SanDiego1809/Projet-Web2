@@ -16,5 +16,6 @@ urlpatterns = [
     path('post/new/', PostCreateView.as_view(), name='post-create'), #creation d'un post
     path('about/', views.about, name='blog-about'), # localhost:8000/about/
     path('place_search/', views.place_search, name='place-search'),#chercher un endroit
+    path('filter/', views.filter, name='blog-filter'),#chercher un filtre
     path('my_posts/', UserMyPostsListView.as_view(), name='user-myposts'), #permet de consulter "My posts"
 ]

@@ -13,10 +13,10 @@ class Post(models.Model): #creation d'un Post
     title = models.CharField(max_length=100)
     price = models.DecimalField(default=0, max_digits= 15, decimal_places=2)
     sell_rent = models.CharField(default= 'S', max_length=10, choices=SELLORRENT_CHOICES)
-    content= models.TextField()
+    content = models.TextField()
     image = models.ImageField(default='defaultAnnounce.jpg', upload_to='announce_pics')
-    date_posted= models.DateTimeField(default=timezone.now)
-    author= models.ForeignKey(User, on_delete=models.CASCADE) #reférence à une autre classe (clé étrangère)
+    date_posted = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.CASCADE) #reférence à une autre classe (clé étrangère)
     #on_delete=models.CASCADE --> signifie que lors de la suppression d'un User, tous ses posts seront supprimés aussi
 
     def save(self, *args, **kwargs):  # method that runs after our model is saved --> méthode qui existe déjà mais on va la réécrire afin d'ajouter des fonctionnalités
