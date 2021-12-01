@@ -4,7 +4,6 @@
 
 <!-- début de la boucle for (for loop)-->
     {% for post in posts %}
-
         <article class="media content-section">
             <!-- show the profile picture of the authors next to the posts-->
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
@@ -18,10 +17,10 @@
                     <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
                     <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
                 </div>
-                <h6><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h6>
+                <h5 class="display-5"><a  href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5>
                 <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
-                <h3 class="article-content">{{ post.price }} €</h3>
-                <h6 class="article-content">{{ post.get_sell_rent_display }}</h6>
+                <h2 class="article-content">{{ post.price }} €</h2>
+                <h5 class="article-content">{{ post.get_sell_rent_display }}</h5>
             </div>
             <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
         </article>

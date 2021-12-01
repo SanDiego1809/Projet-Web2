@@ -21,6 +21,14 @@ class UserPostWatchlist(ListView): #consulter les posts dans la watchlist
     context_object_name = 'posts'
     paginate_by = 5  # nombre de posts qui vont être affichés sur une page
 
+class UserMyPostsListView(ListView): #affiche les posts dans "My Posts"
+    model = Post
+    template_name = 'blog/user_myposts.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'posts'
+    ordering = ['-date_posted']
+    paginate_by = 5
+
+
 class PostListView(ListView): #affichage de tous les posts (home.html)
     model = Post
     template_name = 'blog/home.html' # <app>/<model>_<viewtype>.html
