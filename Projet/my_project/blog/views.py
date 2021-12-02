@@ -137,11 +137,10 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
         qs = qs.filter(price__lt=max)
 
     if sellOrRent != '' and sellOrRent is not None and sellOrRent != 'Choose an option':
-         qs = qs.filter(sell_rent__name=sellOrRent)
+        qs = qs.filter(sell_rent__icontains=sellOrRent)
 
     context = {
-        'queryset': qs,
-        'choices': SELLORRENT_CHOICES
+        'queryset': qs.order_by('-date_posted')
     }
     return render(request, 'blog/filter.html', context)
 
