@@ -77,20 +77,41 @@
         {% endif %}
       {% block content %} {% endblock %}
     </div>
-      <!-- Sidebar -->
-    <div class="col-md-4">
-      <div class="content-section">
-        <h3>Our Sidebar</h3>
-        <p class='text-muted'>You can put any information here you'd like.
-          <ul class="list-group">
-            <li class="list-group-item list-group-item-light">Latest Posts</li>
-            <li class="list-group-item list-group-item-light">Announcements</li>
-            <li class="list-group-item list-group-item-light">Calendars</li>
-            <li class="list-group-item list-group-item-light">etc</li>
-          </ul>
-        </p>
-      </div>
-    </div>
+     <!-- Sidebar -->
+        <section class="col-md-4">
+            <div class="content-section">
+                <h3>Filters</h3>
+
+                <form action="{% url 'blog-filter' %}" method=GET>
+                    {% csrf_token %}
+                    <h6 class="font-weight-bold mb-3">Price</h6>
+                    <div class="d-flex align-items-center mt-4 pb-1">
+                        <div class="md-form md-outline my-0">
+                            <input class="form-control mb-0" id="form" name="min" placeholder="$ min" type="text">
+                        </div>
+                        <p class="px-2 mb-0 text-muted"> - </p>
+                        <div class="md-form md-outline my-0">
+                            <input class="form-control mb-0" id="to" name="max" placeholder="$ max" type="text">
+                        </div>
+                    </div>
+                    <h6 class="font-weight-bold mb-3">Place</h6>
+                    <input aria-label="Search" class="form-control me-2" name="search" placeholder="Search for a place"
+                           type="search">
+
+                    <h6 class="font-weight-bold mb-3">Sell or rent</h6>
+                    <div class="form-group">
+                        <select class="form-control" name="sellOrRent " >
+                            <option>Choose an option</option>
+                            <option value='S'>To Sell</option>
+                            <option value='R'>To Rent</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-outline-info" type="submit">Search</button>
+
+                </form>
+            </div>
+        </section>
   </div>
 </main>
 
