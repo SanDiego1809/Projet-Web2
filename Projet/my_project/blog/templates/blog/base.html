@@ -1,6 +1,6 @@
-{% load static %}
-
 <!DOCTYPE html>
+
+{% load static %}
 
 <html lang="en">
 <head>
@@ -11,12 +11,12 @@
     <!-- Bootstrap CSS -->
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
-    <link href="{% static 'blog/main.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
 
     {% if title%}
-    <title>Django - {{ title }}</title>
+        <title>Django - {{ title }}</title>
     {% else %}
-    <title>Django Default</title>
+        <title>Django Default</title>
     {% endif %}
 </head>
 <body>
@@ -24,8 +24,7 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
             <!-- bouton 3 barres qd site en petit -->
-            <button aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation"
-                    class="navbar-toggler"
+            <button aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                     data-target="#navbarToggle" data-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -38,25 +37,26 @@
 
                 <!-- Navbar partie centrale -->
                 <div class="navbar-nav mx-auto">
-                    <form action="{% url 'place-search' %}" class="d-flex" method=POST>
+                     <form class="d-flex" method=POST action="{% url 'place-search' %}">
                         {% csrf_token %}
-                        <input aria-label="Search" class="form-control me-2" name="search"
-                               placeholder="Search for a place" type="search">
-                        <button class="btn btn-outline-info" type="submit">Search</button>
-                    </form>
+                        <input class="form-control me-2" type="search" placeholder="Search for a place" aria-label="Search" name="search">
+                        <button class="btn btn-dark ml-1" type="submit">Search</button>
+                     </form>
                 </div>
 
                 <!-- Navbar partie droite -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
-                    <a class="nav-item nav-link" href="{% url 'post-create' %}">New post</a>
-                    <a class="nav-item nav-link" href="{% url 'user-watchlist' %}">Watchlist</a>
-                    <a class="nav-item nav-link" href="{% url 'user-myposts' %}">My posts</a>
-                    <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-                    <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                        <a class="nav-item nav-link" href="{% url 'post-create' %}">New post</a>
+                        <a class="nav-item nav-link" href="{% url 'user-watchlist' %}">Watchlist</a>
+                        <a class="nav-item nav-link" href="{% url 'user-myposts' %}">My posts</a>
+                        <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                        <a class="nav-item nav-link" href="{% url 'profile' %}">
+                            <img class="rounded-circle navbar-profile" src="{{ request.user.profile.image.url }}">
+                        </a>
                     {% else %} <!-- si l'utilisateur n'est pas connecté -->
-                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                    <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                        <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
                     {% endif %}
                 </div>
             </div>
@@ -64,58 +64,68 @@
     </nav>
 </header>
 
-<main class="container" role="main">
-    <div class="row">
-        <div class="col-md-8">
-            {% if messages %}
+<main role="main" class="container">
+  <div class="row">
+    <div class="col-md-8">
+        {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
+                <div class="alert alert-{{ message.tags }} m-2" id="message_id">
+                    {{ message }}
+                </div>
             {% endfor %}
-            {% endif %}
-            {% block content %} {% endblock %}
-        </div>
-        <!-- Sidebar -->
-        <section class="col-md-4">
-            <div class="content-section">
-                <h3>Filters</h3>
 
-                <form action="{% url 'blog-filter' %}" method="GET">
-                    {% csrf_token %}
-                    <h6 class="font-weight-bold mb-3">Price</h6>
-                    <div class="d-flex align-items-center mt-4 pb-1">
-                        <div class="md-form md-outline my-0">
-                            <input class="form-control mb-0" id="form" name="min" placeholder="$ min" type="text">
-                        </div>
-                        <p class="px-2 mb-0 text-muted"> - </p>
-                        <div class="md-form md-outline my-0">
-                            <input class="form-control mb-0" id="to" name="max" placeholder="$ max" type="text">
-                        </div>
-                    </div>
-                    <h6 class="font-weight-bold mb-3">Place</h6>
-                    <input aria-label="Search" class="form-control me-2" name="search" placeholder="Search for a place"
-                           type="search">
-
-                    <h6 class="font-weight-bold mb-3">Sell or rent</h6>
-                    <div class="form-group">
-                        <select class="form-control" name="sellOrRent " >
-                            <option>Choose an option</option>
-                            <option value='S'>To Sell</option>
-                            <option value='R'>To Rent</option>
-                        </select>
-                    </div>
-
-                    <button class="btn btn-outline-info" type="submit">Search</button>
-
-                </form>
-            </div>
-        </section>
+        {% endif %}
+      {% block content %} {% endblock %}
     </div>
+      <!-- Sidebar -->
+    <div class="col-md-4">
+      <div class="content-section">
+        <h3>Our Sidebar</h3>
+        <p class='text-muted'>You can put any information here you'd like.
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-light">Latest Posts</li>
+            <li class="list-group-item list-group-item-light">Announcements</li>
+            <li class="list-group-item list-group-item-light">Calendars</li>
+            <li class="list-group-item list-group-item-light">etc</li>
+          </ul>
+        </p>
+      </div>
+    </div>
+  </div>
 </main>
+
+<!-- STYLE CSS -->
+<style>
+    .site-header .navbar-nav .nav-link {
+        color: black;
+    }
+
+    .site-header .navbar-nav .nav-link:hover {
+        color: #ffffff;
+    }
+
+    .bg-steel {
+        background-color: #FFCD00;
+    }
+
+    .navbar-profile{
+        width: 2em;
+        height: 2em;
+    }
+</style>
+<!-- STYLE CSS END-->
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script>
+    //ce script permet de faire disparaitre les messages affichés au bout de 3 secondes
+    var curr_message = document.getElementById('message_id');
+
+    setTimeout(function(){
+       curr_message.style.display = "none";
+    }, 3000);
+</script>
+
 <script crossorigin="anonymous"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
