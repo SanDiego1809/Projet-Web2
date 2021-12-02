@@ -10,7 +10,11 @@
 
             <div class="media-body">
                 {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
-                    <button id="btnWatchList" class="text-right btn btn-success btn-sm mt-1 mb-1" onclick="watchList()">Add to Watchlist</button>
+                    <form method="POST"  action="{% url 'add-post-in-watchlist' %}">
+                      {% csrf_token %}
+                      <input hidden type="text" value="{{ post.id }}" name="post_id">
+                      <button id="btnFav" class="btn btn-outline-success m-1" type="submit">Favorite</button>
+                    </form>
                 {% endif %}
 
                 <div class="article-metadata">
@@ -52,14 +56,5 @@
     {% endif %}
 
 <!-- FIN PAGINATION -->
-
-<!-- JavaScript -->
-<script>
-      function watchList()
-      {
-        document.getElementById("btnWatchList").innerHTML ="Added to watchlist";
-		document.getElementById("btnWatchList").style.background ="red";
-      }
-</script>
 
 {% endblock content %}

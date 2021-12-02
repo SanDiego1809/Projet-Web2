@@ -19,3 +19,4 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size) #resize the image to 300x300
             img.save(self.image.path) #save the changes
+
