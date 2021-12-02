@@ -150,3 +150,6 @@ def about(request):
     # return HttpResponse('<h1>About Home</h1>')
     return render(request,  'blog/about.html', {'title' : 'My About Page'})
 
+def stats(request):
+    # return HttpResponse('<h1>About Home</h1>')
+    return render(request,  'blog/stats.html', {'title' : 'My Stats Page'})
