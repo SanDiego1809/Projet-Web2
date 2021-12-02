@@ -101,9 +101,8 @@
                     <div class="form-group">
                         <select class="form-control" name="sellOrRent " >
                             <option>Choose an option</option>
-                            {% for choice in choices %}
-                                <option value="{{ choice }}">{{ choice }}</option>
-                            {% endfor %}
+                            <option value='S'>To Sell</option>
+                            <option value='R'>To Rent</option>
                         </select>
                     </div>
 
