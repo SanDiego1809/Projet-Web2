@@ -114,6 +114,38 @@ def watchlist(request):
     user_watchlist = curr_user.watchlist_list.all() #permet d'obtenir la watchlist de l'utilisateur en cours
     return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist, 'title' : 'My watchlist'})
 
+def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
+    qs = Post.objects.all()
+
+    SELLORRENT_CHOICES = (
+        ('S', 'To Sell'),
+        ('R', 'To Rent'),
+    )
+
+    search = request.GET.get('search')
+    min = request.GET.get('min')
+    max = request.GET.get('max')
+    sellOrRent = request.GET.get('sellOrRent')
+
+    if search != '' and search is not None:
+        qs = qs.filter(title__icontains=search)
+
+    if min != '' and min is not None:
+        qs = qs.filter(price__gte=min)
+
+    if max != '' and max is not None:
+        qs = qs.filter(price__lt=max)
+
+    if sellOrRent != '' and sellOrRent is not None and sellOrRent != 'Choose an option':
+         qs = qs.filter(sell_rent__name=sellOrRent)
+
+    context = {
+        'queryset': qs,
+        'choices': SELLORRENT_CHOICES
+    }
+    return render(request, 'blog/filter.html', context)
+
+
 def about(request):
     # return HttpResponse('<h1>About Home</h1>')
     return render(request,  'blog/about.html', {'title' : 'My About Page'})
