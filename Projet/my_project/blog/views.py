@@ -90,15 +90,15 @@ def place_search(request):# inspired by the video https://www.youtube.com/watch?
 def add_post_in_watchlist(request):
 
     if request.method == 'POST':
-        if request.POST.get('post_id'):
-            post_id = request.POST.get('post_id') #je récupère l'id du post concerné
+        if request.POST['post_id']:
+            post_id = request.POST['post_id'] #je récupère l'id du post concerné
             model = Watchlist()
             model.post = Post.objects.filter(id = post_id).get()
-            model.user = request.user;
+            model.user = request.user
 
             search_if_already_in_watchlist = Watchlist.objects.filter(post = model.post, user=model.user)
 
-            if len(search_if_already_in_watchlist) == 0: #si l'élément n'est pas dans la watchlist
+            if len(search_if_already_in_watchlist) == 0: #si l'élément n'est pas dans la watchlist (présent 0 fois)
                 model.save()
                 messages.success(request, 'Post successfully added to your watchlist !')
             else:
@@ -112,7 +112,7 @@ def add_post_in_watchlist(request):
 def watchlist(request):
     curr_user = User.objects.filter(username=request.user.username).get() #utilisateur actuel
     user_watchlist = curr_user.watchlist_list.all() #permet d'obtenir la watchlist de l'utilisateur en cours
-    return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist})
+    return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist, 'title' : 'My watchlist'})
 
 def about(request):
     # return HttpResponse('<h1>About Home</h1>')

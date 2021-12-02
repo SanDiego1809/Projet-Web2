@@ -13,9 +13,10 @@
                     <form method="POST"  action="{% url 'add-post-in-watchlist' %}">
                       {% csrf_token %}
                       <input hidden type="text" value="{{ post.id }}" name="post_id">
-                      <button id="btnFav" class="btn btn-outline-success m-1" type="submit">Favorite</button>
+                      <button id="btnFav" class="btn btn-outline-warning m-1" type="submit">Favorite</button>
                     </form>
                 {% endif %}
+
 
                 <div class="article-metadata">
                     <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
@@ -36,21 +37,21 @@
     {% if is_paginated %} <!-- s'il y a plusieurs pages -->
 
         {% if page_obj.has_previous %} <!-- s'il y'a des pages avant la page actuelle -->
-                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                <a class="btn btn-outline-dark mb-4" href="?page=1">First</a>
+                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
         {% endif %}
 
         {% for num in page_obj.paginator.page_range %}
             {% if page_obj.number == num %}
-                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                <a class="btn btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
             {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                <a class="btn btn-outline-dark mb-4" href="?page={{ num }}">{{ num }}</a>
             {% endif %}
         {% endfor %}
 
         {% if page_obj.has_next %} <!-- s'il y'a des pages après la page actuelle -->
-                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
         {% endif %}
 
     {% endif %}
