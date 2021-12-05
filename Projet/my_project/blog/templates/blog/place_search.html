@@ -19,7 +19,11 @@
                 <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
                  <h5 class="article-content">Price : {{ post.price }} € </h5>
                 <h4 class="article-content">{{ post.get_sell_rent_display }}</h4>
+                <h5 class="article-content">{{ post.localisation }}</h5>
+                <h5 class="article-content">{{ post.get_category_display }}</h5>
+                <h5 class="article-content">{{ post.surface }}</h5>
                 <p class="article-content">{{ post.content }}</p>
+
             </div>
         </article>
 
