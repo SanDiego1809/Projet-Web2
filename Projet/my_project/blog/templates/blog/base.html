@@ -12,6 +12,8 @@
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+    <!-- importation icons bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
     {% if title%}
         <title>Django - {{ title }}</title>
@@ -100,7 +102,7 @@
 
                     <h6 class="font-weight-bold mb-3">Sell or rent</h6>
                     <div class="form-group">
-                        <select class="form-control" name="sellOrRent " >
+                        <select class="form-control" name="sellOrRent" >
                             <option>Choose an option</option>
                             <option value='S'>To Sell</option>
                             <option value='R'>To Rent</option>
@@ -129,7 +131,7 @@
         background-color: #FFCD00;
     }
 
-    .navbar-profile{
+    .navbar-profile {
         width: 2em;
         height: 2em;
     }

@@ -102,7 +102,8 @@ def add_post_in_watchlist(request):
                 model.save()
                 messages.success(request, 'Post successfully added to your watchlist !')
             else:
-                messages.warning(request, 'This post is already in your watchlist...')
+                search_if_already_in_watchlist.delete()
+                messages.warning(request, 'Post successfully deleted from your watchlist.')
 
             return HttpResponseRedirect(reverse('blog-home')) #afin d'aller sur la page home
     else:
@@ -115,7 +116,7 @@ def watchlist(request):
     return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist, 'title' : 'My watchlist'})
 
 def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
-    qs = Post.objects.all()
+    qs = Post.objects
 
     SELLORRENT_CHOICES = (
         ('S', 'To Sell'),
@@ -137,7 +138,7 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
         qs = qs.filter(price__lt=max)
 
     if sellOrRent != '' and sellOrRent is not None and sellOrRent != 'Choose an option':
-         qs = qs.filter(sell_rent__name=sellOrRent)
+         qs = qs.filter(sell_rent__icontains=sellOrRent)
 
     context = {
         'queryset': qs,
