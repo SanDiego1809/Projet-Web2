@@ -3,34 +3,37 @@
 {% block content %}
 
 {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
-    <h2>{{ user }}'s watchlist</h2>
+<h2>{{ user }}'s watchlist</h2>
 
-    {% for favorite in user_watchlist %}
-        <article class="media content-section">
-            <!-- show the profile picture of the authors next to the posts-->
-            <img class="rounded-circle article-img" src="{{ favorite.post.author.profile.image.url }}">
+{% for favorite in user_watchlist %}
+<article class="media content-section">
+    <!-- show the profile picture of the authors next to the posts-->
+    <img class="rounded-circle article-img" src="{{ favorite.post.author.profile.image.url }}">
 
-            <div class="media-body">
-                <div class="article-metadata">
-                    <a class="mr-2" href="{% url 'user-posts' favorite.post.author.username %}">{{ favorite.post.author }}</a>
-                    <small class="text-muted">{{ favorite.post.date_posted|date:"F d, Y" }}</small>
-                </div>
-                <h5 class="display-5"><a  href="{% url 'post-detail' favorite.post.id %}">{{ favorite.post.title }}</a></h5>
-                <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
-                <h2 class="article-content">{{ favorite.post.price }} €</h2>
-                <h5 class="article-content">{{ favorite.post.get_sell_rent_display }}</h5>
-            </div>
-            <img class="rounded float-left ml-3 mr-3" src="{{ favorite.post.image.url }}">
-        </article>
-    {% empty %}
-        <h5>Nothing to see here</h5>
-    {% endfor %}
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'user-posts' favorite.post.author.username %}">{{ favorite.post.author }}</a>
+            <small class="text-muted">{{ favorite.post.date_posted|date:"F d, Y" }}</small>
+        </div>
+        <h5 class="display-5"><a href="{% url 'post-detail' favorite.post.id %}">{{ favorite.post.title }}</a></h5>
+        <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
+        <h2 class="article-content">{{ favorite.post.price }} €</h2>
+        <h5 class="article-content">{{ favorite.post.get_sell_rent_display }}</h5>
+        <h5 class="article-content">{{ favorite.localisation }}</h5>
+        <h5 class="article-content">{{ favorite.get_category_display }}</h5>
+        <h5 class="article-content">{{ favorite.surface }}</h5>
+    </div>
+    <img class="rounded float-left ml-3 mr-3" src="{{ favorite.post.image.url }}">
+</article>
+{% empty %}
+<h5>Nothing to see here</h5>
+{% endfor %}
 
 {% else %} <!-- si l'utilisateur n'est pas connecté -->
-    <div class="border-top pt-3">
-        <h1>You have to be logged in to access your watchlist</h1>
-        <h4><a href="{% url 'login' %}">Click here to log in</a></h4>
-    </div>
+<div class="border-top pt-3">
+    <h1>You have to be logged in to access your watchlist</h1>
+    <h4><a href="{% url 'login' %}">Click here to log in</a></h4>
+</div>
 {% endif %}
 
 

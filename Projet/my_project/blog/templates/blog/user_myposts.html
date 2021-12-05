@@ -23,6 +23,10 @@
                     <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
                      <h3 class="article-content">{{ post.price }} € </h3>
                     <h5 class="article-content">{{ post.get_sell_rent_display }}</h5>
+                     <h5 class="article-content">{{ post.localisation }}</h5>
+                     <h5 class="article-content">{{ post.get_category_display }}</h5>
+                     <h5 class="article-content">{{ post.surface }}</h5>
+
                 </div>
                 <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
             </article>
