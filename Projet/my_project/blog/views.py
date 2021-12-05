@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Post, Watchlist
 from django.urls import reverse
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 # Fichier qui va contenir toutes les vues de notre application "blog"
 
@@ -117,14 +118,19 @@ def watchlist(request):
 def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     qs = Post.objects.all()
 
+    #Pagination found in https://docs.djangoproject.com/en/3.2/topics/pagination/
+    paginator = Paginator(Post.objects.all(), 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     SELLORRENT_CHOICES = (
         ('S', 'To Sell'),
         ('R', 'To Rent'),
     )
 
     localisation = request.GET.get('localisation')
-    priceMin = request.GET.get('min')
-    priceMax = request.GET.get('max')
+    priceMin = request.GET.get('priceMin')
+    priceMax = request.GET.get('priceMax')
     sellOrRent = request.GET.get('sellOrRent')
     category = request.GET.get('category')
     surfaceMin = request.GET.get('surfaceMin')
@@ -152,9 +158,10 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
         qs = qs.filter(surface__lt=surfaceMax)
 
     context = {
-        'queryset': qs.order_by('-date_posted')
+        'queryset': qs,
+        #'page_obj': page_obj
     }
-    return render(request, 'blog/filter.html', context)
+    return render(request, 'blog/filter.html',context)
 
 
 def about(request):
