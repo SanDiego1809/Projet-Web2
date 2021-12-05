@@ -1,53 +1,58 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-<h1 class="mb-3"> Posts by {{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1> <!-- page_obj.paginator.count permet de connaitre le nombre posts total de cet auteur-->
+<h1 class="mb-3"> Posts by {{ view.kwargs.username }} ({{ page_obj.paginator.count
+    }})</h1> <!-- page_obj.paginator.count permet de connaitre le nombre posts total de cet auteur-->
 <!-- début de la boucle for (for loop)-->
-    {% for post in posts %}
-        <article class="media content-section">
-            <!-- show the profile picture of the aunthors next to the posts-->
-            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-            <div class="media-body">
-                {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
-                    <a class="text-right btn btn-success btn-sm mt-1 mb-1" href="#" >Add to Watchlist</a>
-                {% endif %}
-                <div class="article-metadata">
-                    <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-                    <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-                </div>
-                <h5 class="display-5"><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5>
-                <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
-                 <h3 class="article-content">{{ post.price }} € </h3>
-                <h5 class="article-content">{{ post.get_sell_rent_display }}</h5>
-            </div>
-            <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
-        </article>
+{% for post in posts %}
+<article class="media content-section">
+    <!-- show the profile picture of the aunthors next to the posts-->
+    <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+    <div class="media-body">
+        {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
+        <a class="text-right btn btn-success btn-sm mt-1 mb-1" href="#">Add to Watchlist</a>
+        {% endif %}
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+            <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+        </div>
+        <h5 class="display-5"><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5>
+        <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
+        <h3 class="article-content">{{ post.price }} € </h3>
+        <h5 class="article-content">{{ post.get_sell_rent_display }}</h5>
+        <h5 class="article-content">{{ post.localisation }}</h5>
+        <h5 class="article-content">{{ post.get_category_display }}</h5>
+        <h5 class="article-content">{{ post.surface }}</h5>
+    </div>
 
-    {% endfor %}
+    <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
+</article>
+
+{% endfor %}
 <!-- fin de la boucle for -->
 
 <!-- PAGINATION -->
-    {% if is_paginated %} <!-- s'il y a plusieurs pages -->
+{% if is_paginated %} <!-- s'il y a plusieurs pages -->
 
-        {% if page_obj.has_previous %} <!-- s'il y'a des pages avant la page actuelle -->
-                <a class="btn btn-outline-dark mb-4" href="?page=1">First</a>
-                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
+{% if page_obj.has_previous %} <!-- s'il y'a des pages avant la page actuelle -->
+<a class="btn btn-outline-dark mb-4" href="?page=1">First</a>
+<a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+{% endif %}
 
-        {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <a class="btn btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <a class="btn btn-outline-dark mb-4" href="?page={{ num }}">{{ num }}</a>
-            {% endif %}
-        {% endfor %}
+{% for num in page_obj.paginator.page_range %}
+{% if page_obj.number == num %}
+<a class="btn btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+<a class="btn btn-outline-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+{% endif %}
+{% endfor %}
 
-        {% if page_obj.has_next %} <!-- s'il y'a des pages après la page actuelle -->
-                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-        {% endif %}
+{% if page_obj.has_next %} <!-- s'il y'a des pages après la page actuelle -->
+<a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+<a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+{% endif %}
 
-    {% endif %}
+{% endif %}
 
 <!-- FIN PAGINATION -->
 

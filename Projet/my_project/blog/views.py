@@ -49,7 +49,7 @@ class PostDetailView(DetailView): #quand on clique sur un post, le post va être
 
 class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
     model = Post
-    fields = ['title','sell_rent' ,'price', 'content', 'image']
+    fields = ['title', 'sell_rent', 'price', 'localisation', 'category', 'surface', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user #auteur du poste = l'utilisateur actuellement connecté
@@ -57,7 +57,7 @@ class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):  # création d'un post
     model = Post
-    fields = ['title', 'sell_rent' ,'price','content', 'image']
+    fields = ['title', 'sell_rent', 'price', 'localisation', 'category', 'surface', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # auteur du poste = l'utilisateur actuellement connecté

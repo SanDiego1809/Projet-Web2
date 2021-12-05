@@ -8,11 +8,21 @@ SELLORRENT_CHOICES = (
     ('S', 'To Sell'),
     ('R', 'To Rent'),
 )
+CATEGORIES = (
+    ('H', 'House'),
+    ('A', 'Apartment'),
+    ('G', 'Garage'),
+)
 
 class Post(models.Model): #creation d'un Post
     title = models.CharField(max_length=100)
     price = models.DecimalField(default=0, max_digits= 15, decimal_places=2)
     sell_rent = models.CharField(default= 'S', max_length=10, choices=SELLORRENT_CHOICES)
+    localisation = models.CharField(default='Bruxelles',max_length=100)
+    category = models.CharField(default= 'H', max_length=10, choices=CATEGORIES)
+    surface = models.DecimalField(default=0, max_digits= 8, decimal_places=2)
+    #construction_year
+    #pieces = models.DecimalField(default=0, max_digits= 3)
     content = models.TextField()
     image = models.ImageField(default='defaultAnnounce.jpg', upload_to='announce_pics')
     date_posted = models.DateTimeField(default=timezone.now)
