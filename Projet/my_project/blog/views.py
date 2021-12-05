@@ -49,7 +49,7 @@ class PostDetailView(DetailView): #quand on clique sur un post, le post va être
 
 class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
     model = Post
-    fields = ['title', 'sell_rent', 'price', 'localisation', 'category', 'surface', 'content', 'image']
+    fields = ['title','sell_rent' ,'price', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user #auteur du poste = l'utilisateur actuellement connecté
@@ -57,7 +57,7 @@ class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):  # création d'un post
     model = Post
-    fields = ['title', 'sell_rent', 'price', 'localisation', 'category', 'surface', 'content', 'image']
+    fields = ['title', 'sell_rent' ,'price','content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # auteur du poste = l'utilisateur actuellement connecté
@@ -102,7 +102,8 @@ def add_post_in_watchlist(request):
                 model.save()
                 messages.success(request, 'Post successfully added to your watchlist !')
             else:
-                messages.warning(request, 'This post is already in your watchlist...')
+                search_if_already_in_watchlist.delete()
+                messages.warning(request, 'Post successfully deleted from your watchlist.')
 
             return HttpResponseRedirect(reverse('blog-home')) #afin d'aller sur la page home
     else:
@@ -115,7 +116,7 @@ def watchlist(request):
     return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist, 'title' : 'My watchlist'})
 
 def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
-    qs = Post.objects.all()
+    qs = Post.objects
 
     SELLORRENT_CHOICES = (
         ('S', 'To Sell'),
@@ -137,10 +138,11 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
         qs = qs.filter(price__lt=max)
 
     if sellOrRent != '' and sellOrRent is not None and sellOrRent != 'Choose an option':
-        qs = qs.filter(sell_rent__icontains=sellOrRent)
+         qs = qs.filter(sell_rent__icontains=sellOrRent)
 
     context = {
-        'queryset': qs.order_by('-date_posted')
+        'queryset': qs,
+        'choices': SELLORRENT_CHOICES
     }
     return render(request, 'blog/filter.html', context)
 

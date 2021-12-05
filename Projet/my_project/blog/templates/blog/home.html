@@ -7,13 +7,14 @@
         <article class="media content-section">
             <!-- show the profile picture of the authors next to the posts-->
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-
             <div class="media-body">
                 {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
                     <form method="POST"  action="{% url 'add-post-in-watchlist' %}">
                       {% csrf_token %}
                       <input hidden type="text" value="{{ post.id }}" name="post_id">
-                      <button id="btnFav" class="btn btn-outline-warning m-1" type="submit">Favorite</button>
+                        <button id="btnFav1" class="btn btn-outline-warning m-1" type="submit">
+                            <i class="bi bi-star-fill"></i>
+                        </button>
                     </form>
                 {% endif %}
 
