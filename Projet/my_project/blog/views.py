@@ -122,7 +122,7 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
         ('R', 'To Rent'),
     )
 
-    search = request.GET.get('search')
+    localisation = request.GET.get('localisation')
     priceMin = request.GET.get('min')
     priceMax = request.GET.get('max')
     sellOrRent = request.GET.get('sellOrRent')
@@ -130,8 +130,8 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     surfaceMin = request.GET.get('surfaceMin')
     surfaceMax = request.GET.get('surfaceMax')
 
-    if search != '' and search is not None:
-        qs = qs.filter(title__icontains=search)
+    if localisation != '' and localisation is not None:
+        qs = qs.filter(localisation__icontains=localisation)
 
     if priceMin != '' and priceMin is not None:
         qs = qs.filter(price__gte=priceMin)
