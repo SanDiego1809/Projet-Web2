@@ -123,21 +123,33 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     )
 
     search = request.GET.get('search')
-    min = request.GET.get('min')
-    max = request.GET.get('max')
+    priceMin = request.GET.get('min')
+    priceMax = request.GET.get('max')
     sellOrRent = request.GET.get('sellOrRent')
+    category = request.GET.get('category')
+    surfaceMin = request.GET.get('surfaceMin')
+    surfaceMax = request.GET.get('surfaceMax')
 
     if search != '' and search is not None:
         qs = qs.filter(title__icontains=search)
 
-    if min != '' and min is not None:
-        qs = qs.filter(price__gte=min)
+    if priceMin != '' and priceMin is not None:
+        qs = qs.filter(price__gte=priceMin)
 
-    if max != '' and max is not None:
-        qs = qs.filter(price__lt=max)
+    if priceMax != '' and priceMax is not None:
+        qs = qs.filter(price__lt=priceMax)
 
     if sellOrRent != '' and sellOrRent is not None and sellOrRent != 'Choose an option':
         qs = qs.filter(sell_rent__icontains=sellOrRent)
+
+    if category != '' and category is not None and category != 'Choose an option':
+        qs = qs.filter(category__icontains=category)
+
+    if surfaceMin != '' and surfaceMin is not None:
+        qs = qs.filter(surface__gte=surfaceMin)
+
+    if surfaceMax != '' and surfaceMax is not None:
+        qs = qs.filter(surface__lt=surfaceMax)
 
     context = {
         'queryset': qs.order_by('-date_posted')
