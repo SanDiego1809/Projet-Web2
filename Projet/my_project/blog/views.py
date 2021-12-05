@@ -83,13 +83,12 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView): #quan
 def place_search(request):# inspired by the video https://www.youtube.com/watch?v=AGtae4L5BbI&list=WL&index=33&t=913s
     if request.method == 'POST':
         search = request.POST['search']
-        posts= Post.objects.filter(title__contains = search)
+        posts= Post.objects.filter(localisation__contains = search)
         return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts})
     else:
         return render(request, 'blog/place_search.html', {})
 
 def add_post_in_watchlist(request):
-
     if request.method == 'POST':
         if request.POST['post_id']:
             post_id = request.POST['post_id'] #je récupère l'id du post concerné
@@ -117,16 +116,6 @@ def watchlist(request):
 
 def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     qs = Post.objects.all()
-
-    #Pagination found in https://docs.djangoproject.com/en/3.2/topics/pagination/
-    paginator = Paginator(Post.objects.all(), 5)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    SELLORRENT_CHOICES = (
-        ('S', 'To Sell'),
-        ('R', 'To Rent'),
-    )
 
     localisation = request.GET.get('localisation')
     priceMin = request.GET.get('priceMin')
@@ -157,9 +146,14 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     if surfaceMax != '' and surfaceMax is not None:
         qs = qs.filter(surface__lt=surfaceMax)
 
+    # Pagination found in https://docs.djangoproject.com/en/3.2/topics/pagination/
+    paginator = Paginator(Post.objects.all(), 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'queryset': qs,
-        #'page_obj': page_obj
+        'queryset': qs.order_by('-date_posted'),
+        'page_obj': page_obj
     }
     return render(request, 'blog/filter.html',context)
 
