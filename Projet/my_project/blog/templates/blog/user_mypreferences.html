@@ -1,14 +1,15 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-<h1>Filters</h1>
-<!-- début de la boucle for (for loop)-->
-    {% for post in queryset %}
+
+{% if user.is_authenticated %}
+    <h1>{{ user }}'s preferences</h1>
+
+    {% for post in preferences %}
         <article class="media content-section">
             <!-- show the profile picture of the authors next to the posts-->
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
             <div class="media-body">
-                {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
                     <form method="POST"  action="{% url 'add-post-in-watchlist' %}">
                       {% csrf_token %}
                       <input hidden type="text" value="{{ post.id }}" name="post_id">
@@ -16,8 +17,6 @@
                             <i class="bi bi-star-fill"></i>
                         </button>
                     </form>
-                {% endif %}
-
                 <div class="article-metadata">
                     <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
                     <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
@@ -32,9 +31,9 @@
             </div>
             <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
         </article>
-
     {% endfor %}
-<!-- fin de la boucle for -->
+
+{% endif %}
 
 <!-- PAGINATION -->
     {% if is_paginated %} <!-- s'il y a plusieurs pages -->
@@ -60,4 +59,6 @@
     {% endif %}
 
 <!-- FIN PAGINATION -->
+
+
 {% endblock content %}
