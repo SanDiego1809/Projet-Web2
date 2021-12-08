@@ -1,0 +1,27 @@
+{% extends "blog/base.html" %}
+{% block content %}
+
+
+    <h1>My map Page</h1>
+
+    <div id='map' style='width: 80%; height: 80%;'></div>
+    <!--https://docs.mapbox.com/mapbox-gl-js/guides/install/ -->
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2FuZGllZ28xOCIsImEiOiJja3d4bGc2a3IwZHc3MnZsY2k1aGsycHE2In0.pHBEi0TiJZrYk0vIggf-7Q';
+        var map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+            center: [ 4.397177631810613,50.818427223414155], // starting position [lng, lat]
+            zoom: 2 // starting zoom
+        });
+        // Create a new marker.
+        var marker;
+        {% for address in map %}
+            marker = new mapboxgl.Marker()
+                .setLngLat([ {{ address.long }}, {{ address.lat }} ])
+                .setPopup(new mapboxgl.Popup().setHTML("{{ address.address }}"))
+                .addTo(map);
+        {% endfor %}
+    </script>
+
+{% endblock content %}

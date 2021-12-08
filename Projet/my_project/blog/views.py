@@ -42,7 +42,7 @@ class UserPostListView(ListView): #affichage de tous les posts (home.html)
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        #si l'utilsateur existe, il sera enregistré dans la variable user, sinon erreur 404
+        #si l'utilisateur existe, il sera enregistré dans la variable user, sinon erreur 404
         return Post.objects.filter(author=user).order_by('-date_posted') #tous les posts de l'autheur concerné (filter), du plus récént au plus ancien
 
 
@@ -51,7 +51,7 @@ class PostDetailView(DetailView): #quand on clique sur un post, le post va être
 
 class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
     model = Post
-    fields = ['title', 'sell_rent', 'price', 'localisation', 'category', 'surface', 'content', 'image']
+    fields = ['title', 'sell_rent', 'price', 'localisation','address', 'category', 'surface', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user #auteur du poste = l'utilisateur actuellement connecté
@@ -59,7 +59,7 @@ class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):  # création d'un post
     model = Post
-    fields = ['title', 'sell_rent', 'price', 'localisation', 'category', 'surface', 'content', 'image']
+    fields = ['title', 'sell_rent', 'price', 'localisation','address', 'category', 'surface', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # auteur du poste = l'utilisateur actuellement connecté
@@ -91,11 +91,17 @@ class UserPreferencesPost(ListView):
 def place_search(request):# inspired by the video https://www.youtube.com/watch?v=AGtae4L5BbI&list=WL&index=33&t=913s
     if request.method == 'POST':
         search = request.POST['search']
+
         posts= Post.objects.filter(localisation__contains = search)
 
         posts = Post.objects.filter(title__contains = search)
 
         return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts})
+
+
+        posts= Post.objects.filter(localisation__contains = search)
+        return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts.order_by('-date_posted')})
+
     else:
         return render(request, 'blog/place_search.html', {})
 
@@ -169,6 +175,22 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     }
     return render(request, 'blog/filter.html',context)
 
+#class MapView(CreateView):#https://www.youtube.com/watch?v=65flD9ScEQM
+ #   model = Post
+ #   fields = ['address']
+  #  template_name = 'blog/map.html'
+
+   # def get_context_data(self, **kwargs):
+    #    context = super().get_context_data(**kwargs)
+     #   context['addresses'] = Post.objects.all()
+      #  return context
+
+def map(request):
+    map = Post.objects.all()
+    context={
+        'map': map
+    }
+    return render(request, 'blog/map.html', context)
 
 def about(request):
     # return HttpResponse('<h1>About Home</h1>')
