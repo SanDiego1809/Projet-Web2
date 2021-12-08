@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from PIL import Image
+import geocoder
 
 SELLORRENT_CHOICES = (
     ('S', 'To Sell'),
@@ -13,12 +14,16 @@ CATEGORIES = (
     ('A', 'Apartment'),
     ('G', 'Garage'),
 )
-
+#token for mapbox
+token = 'pk.eyJ1Ijoic2FuZGllZ28xOCIsImEiOiJja3d4bGc2a3IwZHc3MnZsY2k1aGsycHE2In0.pHBEi0TiJZrYk0vIggf-7Q'
 class Post(models.Model): #creation d'un Post
     title = models.CharField(max_length=100)
     price = models.DecimalField(default=0, max_digits= 15, decimal_places=2)
     sell_rent = models.CharField(default= 'S', max_length=10, choices=SELLORRENT_CHOICES)
     localisation = models.CharField(default='Bruxelles',max_length=100)
+    address = models.TextField(default='Boulevard du Triomphe 1 , 1050 Bruxelles')
+    lat = models.FloatField(blank=True, null=True)  # blank pour autoriser des valeurs vides
+    long = models.FloatField(blank=True, null=True)
     category = models.CharField(default= 'H', max_length=10, choices=CATEGORIES)
     surface = models.DecimalField(default=0, max_digits= 8, decimal_places=2)
     #construction_year
@@ -59,11 +64,19 @@ class Post(models.Model): #creation d'un Post
 
         img.save(self.image.path)
 
+        #code from https://geocoder.readthedocs.io/providers/Mapbox.html and https://www.youtube.com/watch?v=65flD9ScEQM
+        g = geocoder.mapbox(self.address, key=token)
+        g = g.latlng
+        self.lat = g[0]
+        self.long = g[1]
+        return super(Post, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk' : self.pk}) #redirige vers la page "post-detail" et enregistre la clé primaire du nouveau post
+
 
 
 class Watchlist(models.Model):
@@ -75,6 +88,11 @@ class Watchlist(models.Model):
 
     def __str__(self):
         return f"{self.post}, {self.user}"
+
+
+
+
+
 
 
 
