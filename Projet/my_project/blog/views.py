@@ -102,6 +102,7 @@ def add_post_in_watchlist(request):
                 model.save()
                 messages.success(request, 'Post successfully added to your watchlist !')
             else:
+                search_if_already_in_watchlist.delete()
                 messages.warning(request, 'This post is already in your watchlist...')
 
             return HttpResponseRedirect(reverse('blog-home')) #afin d'aller sur la page home
