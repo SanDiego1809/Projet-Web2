@@ -63,7 +63,7 @@
                         <a class="nav-item nav-link" href="{% url 'user-myposts' %}">My posts</a>
                         <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                         <a class="nav-item nav-link" href="#">
-                            <img class="rounded-circle navbar-notifications" src="media/notifpic.png">
+                            <img class="rounded-circle navbar-notifications" src="{% static 'notifpic.png' %}">
                         </a>
                         <a class="nav-item nav-link" href="{% url 'profile' %}">
                             <img class="rounded-circle navbar-profile" src="{{ request.user.profile.image.url }}">
