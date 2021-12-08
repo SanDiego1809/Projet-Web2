@@ -18,4 +18,5 @@ urlpatterns = [
     path('place_search/', views.place_search, name='place-search'),#chercher un endroit
     path('filter/', views.filter, name='blog-filter'),#chercher un filtre
     path('my_posts/', UserMyPostsListView.as_view(), name='user-myposts'), #permet de consulter "My posts"
+    path('my_preferences_posts/', views.preferences_posts, name='user-mypreferences'),
 ]

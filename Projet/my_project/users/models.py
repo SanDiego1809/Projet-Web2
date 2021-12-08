@@ -2,9 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
 
+SELLORRENT_CHOICES = (
+    ('S', 'To Sell'),
+    ('R', 'To Rent'),
+)
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) #CASCADE : si je supprime l'utilisateur, le profil sera supprimé aussi. Mais si je supprime le profil, l'utilisateur ne sera pas supprimé
     image = models.ImageField(default='default.jpg', upload_to='profile_pics') #default = image par défaut si l'user ne choisit aucune pdp
+    price_preference = models.DecimalField(default=0, max_digits=15, decimal_places=2) #prix maximum préféré
+    localisation_preference = models.CharField(default='Bruxelles', max_length=100) #localisation préférée
+    sell_rent_preference = models.CharField(default='S', max_length=10, choices=SELLORRENT_CHOICES) #a vendre ou a louer
 
     def __str__(self):
         return f'{self.user.username} Profile'

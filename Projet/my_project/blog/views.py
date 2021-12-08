@@ -6,6 +6,10 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Post, Watchlist
 from django.urls import reverse
 from django.contrib import messages
+<<<<<<< Updated upstream
+=======
+from users.models import Profile
+>>>>>>> Stashed changes
 from django.core.paginator import Paginator
 
 # Fichier qui va contenir toutes les vues de notre application "blog"
@@ -80,10 +84,21 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView): #quan
             return True
         return False
 
+class UserPreferencesPost(ListView):
+    model = Post
+    template_name = 'blog/user_mypreferences.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'posts'
+    ordering = ['-date_posted']
+    paginate_by = 5
+
 def place_search(request):# inspired by the video https://www.youtube.com/watch?v=AGtae4L5BbI&list=WL&index=33&t=913s
     if request.method == 'POST':
         search = request.POST['search']
+<<<<<<< Updated upstream
         posts= Post.objects.filter(localisation__contains = search)
+=======
+        posts = Post.objects.filter(title__contains = search)
+>>>>>>> Stashed changes
         return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts})
     else:
         return render(request, 'blog/place_search.html', {})
@@ -166,3 +181,23 @@ def about(request):
 def stats(request):
     # return HttpResponse('<h1>About Home</h1>')
     return render(request,  'blog/stats.html', {'title' : 'My Stats Page'})
+
+def preferences_posts(request):
+    all_posts = Post.objects.all() #je recupère tous les posts
+
+    user_localisation = request.user.profile.localisation_preference #on recupere les critères de l'utilisateur
+    user_price = request.user.profile.price_preference
+    user_sellrent = request.user.profile.sell_rent_preference
+
+    all_posts = all_posts.filter(price__lt= user_price, localisation= user_localisation, sell_rent= user_sellrent) #prix +petit que le prix max de l'utilisateur
+
+    preferences = all_posts.order_by('-date_posted')
+
+    if len(all_posts) > 0: #si il y'a des posts pouvant intéresser l'utilisateur
+        messages.success(request, 'You have some news in My Preferences')
+
+    context = {
+        'preferences': preferences
+    }
+
+    return render(request, 'blog/user_mypreferences.html', context)
