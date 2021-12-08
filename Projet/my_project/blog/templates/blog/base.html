@@ -38,12 +38,18 @@
                 <!-- Navbar partie de gauche -->
                 <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
+<<<<<<< Updated upstream
                     <a class="nav-item nav-link" href="{% url 'blog-map' %}">Map</a>
+=======
+>>>>>>> Stashed changes
                     {% if user.is_authenticated %}
                         <a class="nav-item nav-link" href="{% url 'blog-stats' %}">My Stats</a>
                         <a class="nav-item nav-link" href="{% url 'user-mypreferences' %}">My Preferences</a>
                     {% endif %}
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
                 </div>
 
                 <!-- Navbar partie centrale -->
@@ -63,7 +69,11 @@
                         <a class="nav-item nav-link" href="{% url 'user-myposts' %}">My posts</a>
                         <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                         <a class="nav-item nav-link" href="#">
+<<<<<<< Updated upstream
                             <img class="rounded-circle navbar-notifications" src="{% static 'notifpic.png' %}">
+=======
+                            <img class="rounded-circle navbar-notifications" src="media/notifpic.png">
+>>>>>>> Stashed changes
                         </a>
                         <a class="nav-item nav-link" href="{% url 'profile' %}">
                             <img class="rounded-circle navbar-profile" src="{{ request.user.profile.image.url }}">
