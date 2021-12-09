@@ -91,9 +91,21 @@ class UserPreferencesPost(ListView):
 def place_search(request):# inspired by the video https://www.youtube.com/watch?v=AGtae4L5BbI&list=WL&index=33&t=913s
     if request.method == 'POST':
         search = request.POST['search']
+<<<<<<< Updated upstream
+
+        posts= Post.objects.filter(localisation__contains = search)
+
+        posts = Post.objects.filter(title__contains = search)
+
+=======
+        posts = Post.objects.filter(title__contains = search)
+>>>>>>> Stashed changes
+        return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts})
+
 
         posts= Post.objects.filter(localisation__contains = search)
         return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts.order_by('-date_posted')})
+
     else:
         return render(request, 'blog/place_search.html', {})
 

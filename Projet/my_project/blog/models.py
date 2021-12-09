@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from PIL import Image
-import geocoder
+#import geocoder
 
 SELLORRENT_CHOICES = (
     ('S', 'To Sell'),
