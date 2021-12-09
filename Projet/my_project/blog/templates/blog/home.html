@@ -51,9 +51,13 @@
                             var map = new mapboxgl.Map({
                                 container: 'map', // container ID
                                 style: 'mapbox://styles/mapbox/streets-v11', // style URL
-                                center: [{{post.long}},{{post.lat}}], // starting position [lng, lat]
+                                center: [ {{ post.long }}, {{ post.lat }}], // starting position [lng, lat]
                                 zoom: 13 // starting zoom
                             });
+                             var marker = new mapboxgl.Marker()
+                            .setLngLat([ {{ post.long }}, {{ post.lat }} ])
+                             .setPopup(new mapboxgl.Popup().setHTML("<p>{{ post.address }}<p>"))
+                            .addTo(map);
                         </script>
                     </div>
 
