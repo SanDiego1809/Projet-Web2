@@ -19,7 +19,8 @@
         {% for address in map %}
             marker = new mapboxgl.Marker()
                 .setLngLat([ {{ address.long }}, {{ address.lat }} ])
-                .setPopup(new mapboxgl.Popup().setHTML("{{ address.address }}"))
+                .setPopup(new mapboxgl.Popup().setHTML("<p>{{ address.address }}<p>"+
+                                                           "<a href= {% url 'post-detail' address.id %}>{{ address.title }}</a>"))
                 .addTo(map);
         {% endfor %}
     </script>

@@ -66,7 +66,60 @@
 
 {% endfor %}
 <!-- fin de la boucle for -->
+</div>
+<!-- Sidebar -->
+        <section class="col-md-4">
+            <div class="content-section">
+                <h3>Filters</h3>
 
+                <form action="{% url 'blog-filter' %}" method=GET>
+                    {% csrf_token %}
+                    <h6 class="font-weight-bold mb-3">Price</h6>
+                    <div class="d-flex align-items-center mt-4 pb-1">
+                        <div class="md-form md-outline my-0">
+                            <input class="form-control mb-0" name="priceMin" placeholder="$ min">
+                        </div>
+                        <p class="px-2 mb-0 text-muted"> - </p>
+                        <div class="md-form md-outline my-0">
+                            <input class="form-control mb-0" name="priceMax" placeholder="$ max">
+                        </div>
+                    </div>
+                    <h6 class="font-weight-bold mb-3">Place</h6>
+                    <input aria-label="Search" class="form-control me-2" name="localisation" placeholder="Search for a place"
+                           type="search">
+
+                    <h6 class="font-weight-bold mb-3">Sell or rent</h6>
+                    <div class="form-group">
+                        <select class="form-control" name="sellOrRent" >
+                            <option>Choose an option</option>
+                            <option value='S'>To Sell</option>
+                            <option value='R'>To Rent</option>
+                        </select>
+                    </div>
+                    <h6 class="font-weight-bold mb-3">Category</h6>
+                    <div class="form-group">
+                        <select class="form-control" name="category" >
+                            <option>Choose an option</option>
+                            <option value='H'>House</option>
+                            <option value='A'>Apartment</option>
+                            <option value='G'>Garage</option>
+                        </select>
+                    </div>
+                    <h6 class="font-weight-bold mb-3">Surface</h6>
+                    <div class="d-flex align-items-center mt-4 pb-1">
+                        <div class="md-form md-outline my-0">
+                            <input class="form-control mb-0"  name="surfaceMin" placeholder="min" type="text">
+                        </div>
+                        <p class="px-2 mb-0 text-muted"> - </p>
+                        <div class="md-form md-outline my-0">
+                            <input class="form-control mb-0" name="surfaceMax" placeholder="max" type="text">
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-info" type="submit">Search</button>
+
+                </form>
+            </div>
+        </section>
 <!-- PAGINATION -->
 {% if is_paginated %} <!-- s'il y a plusieurs pages -->
 
@@ -91,5 +144,4 @@
 {% endif %}
 
 <!-- FIN PAGINATION -->
-
 {% endblock content %}
