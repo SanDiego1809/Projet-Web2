@@ -209,12 +209,12 @@ def preferences_posts(request):
     user_price = request.user.profile.price_preference
     user_sellrent = request.user.profile.sell_rent_preference
 
-    all_posts = all_posts.filter(price__lt= user_price, localisation= user_localisation, sell_rent= user_sellrent) #prix +petit que le prix max de l'utilisateur
+    all_posts = all_posts.filter(price__lte= user_price, localisation= user_localisation, sell_rent= user_sellrent) #prix +petit ou egal au le prix max de l'utilisateur
 
     preferences = all_posts.order_by('-date_posted')
 
     if len(all_posts) > 0: #si il y'a des posts pouvant intéresser l'utilisateur
-        messages.info(request, 'You have some news in My Preferences')
+        messages.info(request, 'You have some interesting news !')
     else:
         messages.warning(request, 'Nothing to see in your preferences...')
         return redirect('blog-home')
