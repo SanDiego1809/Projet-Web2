@@ -11,7 +11,7 @@
         {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
         <form action="{% url 'add-post-in-watchlist' %}" method="POST">
             {% csrf_token %}
-            <input hidden name="post_id" type="text" value="{{ post.id }}">
+            <input type="hidden" name="post_id" value="{{ post.id }}">
             <button class="btn btn-outline-warning m-1" id="btnFav1" type="submit">
                 <i class="bi bi-star-fill"></i>
             </button>
@@ -119,7 +119,7 @@
                             <input class="form-control mb-0" name="surfaceMax" placeholder="max" type="text">
                         </div>
                     </div>
-                    <button class="btn btn-outline-info" type="submit">Search</button>
+                    <button class="btn btn-outline-dark" type="submit">Search</button>
 
                 </form>
             </div>

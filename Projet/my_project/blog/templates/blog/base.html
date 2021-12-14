@@ -62,9 +62,6 @@
                         <a class="nav-item nav-link" href="{% url 'user-watchlist' %}">Watchlist</a>
                         <a class="nav-item nav-link" href="{% url 'user-myposts' %}">My posts</a>
                         <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
-                        <a class="nav-item nav-link" href="#">
-                            <img class="rounded-circle navbar-notifications" src="{% static 'notifpic.png' %}">
-                        </a>
                         <a class="nav-item nav-link" href="{% url 'profile' %}">
                             <img class="rounded-circle navbar-profile" src="{{ request.user.profile.image.url }}">
                         </a>
@@ -96,27 +93,8 @@
 
 <!-- STYLE CSS -->
 <style>
-    .site-header .navbar-nav .nav-link {
-        color: black;
-    }
 
-    .site-header .navbar-nav .nav-link:hover {
-        color: #ffffff;
-    }
 
-    .bg-steel {
-        background-color: #FFCD00;
-    }
-
-    .navbar-profile {
-        width: 2em;
-        height: 2em;
-    }
-
-    .navbar-notifications {
-        width: 1.2em;
-        height: 1.2em;
-    }
 </style>
 <!-- STYLE CSS END-->
 

@@ -12,16 +12,21 @@ ul {
   margin: 0;
 }
 
-.bg-steel {
-  background-color: #5f788a;
-}
-
 .site-header .navbar-nav .nav-link {
-  color: #cbd5db;
+        color: black;
 }
 
 .site-header .navbar-nav .nav-link:hover {
-  color: #ffffff;
+    color: #ffffff;
+}
+
+.bg-steel {
+    background-color: #FFCD00;
+}
+
+.navbar-profile {
+    width: 2em;
+    height: 2em;
 }
 
 .site-header .navbar-nav .nav-link.active {
@@ -32,8 +37,9 @@ ul {
   background: #ffffff;
   padding: 10px 20px;
   border: 1px solid #dddddd;
-  border-radius: 3px;
+  border-radius: 10px;
   margin-bottom: 20px;
+  box-shadow: 1px 2px 3px 3px;
 }
 
 .article-title {

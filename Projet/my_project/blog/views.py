@@ -26,7 +26,6 @@ class UserMyPostsListView(ListView): #affiche les posts dans "My Posts"
     ordering = ['-date_posted']
     paginate_by = 5
 
-
 class PostListView(ListView): #affichage de tous les posts (home.html)
     model = Post
     template_name = 'blog/home.html' # <app>/<model>_<viewtype>.html
@@ -48,6 +47,12 @@ class UserPostListView(ListView): #affichage de tous les posts (home.html)
 
 class PostDetailView(DetailView): #quand on clique sur un post, le post va être afficher de manière bcp + détaillée
     model = Post
+
+    def get_context_data(self, **kwargs):
+        data = super(PostDetailView, self).get_context_data(**kwargs)
+        self.object.number_views = self.object.number_views + 1 #j'incrémente le nombre de vues par 1 à chaque visite de la page
+        self.object.save()
+        return data
 
 class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
     model = Post
@@ -190,7 +195,12 @@ def about(request):
 
 def stats(request):
     # return HttpResponse('<h1>About Home</h1>')
-    return render(request,  'blog/stats.html', {'title' : 'My Stats Page'})
+
+    context = {
+        'title' : 'My Stats Page'
+    }
+
+    return render(request,  'blog/stats.html', context)
 
 def preferences_posts(request):
     all_posts = Post.objects.all() #je recupère tous les posts
@@ -204,7 +214,10 @@ def preferences_posts(request):
     preferences = all_posts.order_by('-date_posted')
 
     if len(all_posts) > 0: #si il y'a des posts pouvant intéresser l'utilisateur
-        messages.success(request, 'You have some news in My Preferences')
+        messages.info(request, 'You have some news in My Preferences')
+    else:
+        messages.warning(request, 'Nothing to see in your preferences...')
+        return redirect('blog-home')
 
     context = {
         'preferences': preferences
