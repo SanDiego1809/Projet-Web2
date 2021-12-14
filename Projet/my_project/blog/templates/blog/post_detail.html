@@ -30,6 +30,40 @@
             <h5 class="article-content">{{ post.get_category_display }}</h5>
             <h5 class="article-content">{{ post.surface }}</h5>
             <h5 class="article-content">Nombre de vues : {{ post.number_views }}</h5>
+            <button class="btn btn-primary" data-target="#Modal" data-toggle="modal" >
+                Map
+            </button>
+             <!-- Modal -->
+        <div class="modal fade" id="Modal" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">{{ post.address }}</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div id='map' style='width: 400px; height: 300px;'></div>
+                        <script>
+                            mapboxgl.accessToken = 'pk.eyJ1Ijoic2FuZGllZ28xOCIsImEiOiJja3d4bGc2a3IwZHc3MnZsY2k1aGsycHE2In0.pHBEi0TiJZrYk0vIggf-7Q';
+                            var map = new mapboxgl.Map({
+                                container: 'map', // container ID
+                                style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                                center: [ {{ post.long }}, {{ post.lat }}], // starting position [lng, lat]
+                                zoom: 13 // starting zoom
+                            });
+                             var marker = new mapboxgl.Marker()
+                            .setLngLat([ {{ post.long }}, {{ post.lat }} ])
+                            .addTo(map);
+                        </script>
+                    </div>
+
+                </div>
+            </div>
+        </div>
             <p class="article-content">{{ object.content }}</p>
         </div>
         <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
