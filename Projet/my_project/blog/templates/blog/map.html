@@ -99,7 +99,7 @@
             `name_${language}`]);
          });
 
-
+        //qd on appuie sur bouton origin, ça remet les caractéristiques zoom et longlat de base
          document.getElementById('fly').addEventListener('click', () =>
          {
             // Fly to a random location by offsetting the point -74.50, 40
@@ -111,6 +111,8 @@
 
             });
         });
+        //ajoute les boutons zoom, dezoom et centrer
+        map.addControl(new mapboxgl.NavigationControl());
 
 </script>
 
