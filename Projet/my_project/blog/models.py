@@ -39,7 +39,6 @@ class Post(models.Model): #creation d'un Post
         super(Post, self).save(*args, **kwargs)
 
         img = Image.open(self.image.path)
-
         width, height = img.size
 
         # check if the current img is more thant 300 px (chosen by Corey Shafer)
