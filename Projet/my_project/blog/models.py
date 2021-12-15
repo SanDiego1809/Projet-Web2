@@ -30,6 +30,8 @@ class Post(models.Model): #creation d'un Post
     #pieces = models.DecimalField(default=0, max_digits= 3)
     content = models.TextField()
     image = models.ImageField(default='defaultAnnounce.jpg', upload_to='announce_pics')
+    image2 = models.ImageField(default='defaultAnnounce.jpg', upload_to='announce_pics')
+    image3 = models.ImageField(default='defaultAnnounce.jpg', upload_to='announce_pics')
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE) #reférence à une autre classe (clé étrangère)
     #on_delete=models.CASCADE --> signifie que lors de la suppression d'un User, tous ses posts seront supprimés aussi
