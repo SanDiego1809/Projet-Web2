@@ -41,10 +41,17 @@ class Post(models.Model): #creation d'un Post
         super(Post, self).save(*args, **kwargs)
 
         img = Image.open(self.image.path)
+        img2= Image.open(self.image2.path)
+        img3 = Image.open(self.image3.path)
+
         width, height = img.size
+        width2, height2 = img2.size
+        width3, height3 = img3.size
 
         # check if the current img is more thant 300 px (chosen by Corey Shafer)
         # code pris : "https://pretagteam.com/question/django-image-compression-and-resize-not-working"
+
+        #img
         if height < width:
 
             left = (width - height) / 2
@@ -66,6 +73,50 @@ class Post(models.Model): #creation d'un Post
 
         img.save(self.image.path)
 
+        #img2
+        if height2 < width2:
+
+            left = (width2 - height2) / 2
+            right = (width2 + height2) / 2
+            top = 0
+            bottom = height2
+            img2 = img2.crop((left, top, right, bottom))
+
+        elif width2 < height2:
+
+            left = 0
+            right = width2
+            top = 0
+            bottom = width2
+            img2 = img2.crop((left, top, right, bottom))
+
+        if width2 > 300 and height2 > 300:
+            img2.thumbnail((300, 300))
+
+        img2.save(self.image2.path)
+
+        #img3
+        if height3 < width3:
+
+            left = (width3 - height3) / 2
+            right = (width3 + height3) / 2
+            top = 0
+            bottom = height3
+            img3 = img3.crop((left, top, right, bottom))
+
+        elif width3 < height3:
+
+            left = 0
+            right = width3
+            top = 0
+            bottom = width3
+            img3 = img3.crop((left, top, right, bottom))
+
+        if width3 > 300 and height3 > 300:
+            img3.thumbnail((300, 300))
+
+        img3.save(self.image3.path)
+
         #code from https://geocoder.readthedocs.io/providers/Mapbox.html and https://www.youtube.com/watch?v=65flD9ScEQM
         g = geocoder.mapbox(self.address, key=token)
         g = g.latlng
@@ -78,7 +129,6 @@ class Post(models.Model): #creation d'un Post
 
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk' : self.pk}) #redirige vers la page "post-detail" et enregistre la clé primaire du nouveau post
-
 
 
 class Watchlist(models.Model):
