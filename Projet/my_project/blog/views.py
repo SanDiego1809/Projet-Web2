@@ -185,10 +185,11 @@ def about(request):
     return render(request,  'blog/about.html', {'title' : 'My About Page'})
 
 def stats(request):
-    numPosts = Post.objects.all().count();
-    numPostsUser = Post.objects.all().count();
-    posts = Post.objects.all();
-
+    numPosts = Post.objects.all().count()
+    curr_user = User.objects.filter(username=request.user.username).get()  # utilisateur actuel
+    numWatchlist = curr_user.watchlist_list.all().count() # permet d'obtenir la watchlist de l'utilisateur en cours
+    numPostsUser = Post.objects.filter(author=curr_user).count()
+    posts = Post.objects.all()
     numHouse = posts.filter(category__icontains='H').count()
     numApartment= posts.filter(category__icontains='A').count()
     numGarage = posts.filter(category__icontains='G').count()
@@ -198,6 +199,7 @@ def stats(request):
     context = {
         'numPosts': numPosts,
         'numPostsUser' : numPostsUser,
+        'numWatchlist': numWatchlist,
         'numHouse': numHouse,
         'numApartment': numApartment,
         'numGarage': numGarage,
