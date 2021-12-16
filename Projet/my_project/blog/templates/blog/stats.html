@@ -1,6 +1,125 @@
 {% extends "blog/base.html" %}
 {% block content %}
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
 
-    <h1>My Stats Page</h1>
+<!-- cards https://getbootstrap.com/docs/4.0/components/card/-->
+<div class="row">
+    <div class="col mt-4 ">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                Stats
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 ">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center bg-info">
+                                    <h4 class="text-white">Posts in total</h4>
+                                    <h3>{{ numPosts }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                   <div class="col-md-4 ">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center bg-info">
+                                    <h4 class="text-white">Your Posts</h4>
+                                    <h3>{{ numPostsUser }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                   <div class="col-md-4 ">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center bg-info">
+                                    <h4 class="text-white">Posts in your watchlist</h4>
+                                    <h3>{{ numPosts }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col mt-4 ">
+        <!-- from https://www.w3schools.com/js/js_graphics_chartjs.asp- -->
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+    </div>
+    <div class="col mt-4 md-5">
+        <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
+    </div>
+</div>
+
+
+<script>
+//values for pie
+var xValues = ["House","Apartment","Garage"];
+var yValues = [{{ numHouse }}, {{ numApartment }}, {{ numGarage }}];
+var barColors =
+[
+  "blue",
+  "red",
+  "green",
+];
+
+//values for bar
+var xValues2 = ["To Sell", "To Rent"];
+var yValues2 = [{{ numSell }}, {{ numRent }}];
+var barColors2 =
+[
+  "blue",
+  "red",
+];
+
+new Chart("myChart",
+ {
+  type: "pie",
+  data:
+  {
+    labels: xValues,
+    datasets:
+    [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options:
+  {
+    title:
+    {
+      display: true,
+      text: "Number of posts by categories"
+    }
+  }
+});
+new Chart("myChart2",
+ {
+  type: "bar",
+  data:
+  {
+    labels: xValues2,
+    datasets:
+    [{
+      backgroundColor: barColors2,
+      data: yValues2
+    }]
+  },
+  options:
+  {
+    legend:{display: false},
+    title:
+    {
+      display: true,
+      text: "Number of posts by sellOrRent"
+    }
+  }
+});
+</script>
+
 
 {% endblock content %}

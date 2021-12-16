@@ -172,15 +172,6 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     }
     return render(request, 'blog/filter.html',context)
 
-#class MapView(CreateView):#https://www.youtube.com/watch?v=65flD9ScEQM
- #   model = Post
- #   fields = ['address']
-  #  template_name = 'blog/map.html'
-
-   # def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-     #   context['addresses'] = Post.objects.all()
-      #  return context
 
 def map(request):
     map = Post.objects.all()
@@ -194,10 +185,25 @@ def about(request):
     return render(request,  'blog/about.html', {'title' : 'My About Page'})
 
 def stats(request):
-    # return HttpResponse('<h1>About Home</h1>')
+    numPosts = Post.objects.all().count();
+    numPostsUser = Post.objects.all().count();
+    posts = Post.objects.all();
 
+    numHouse = posts.filter(category__icontains='H').count()
+    numApartment= posts.filter(category__icontains='A').count()
+    numGarage = posts.filter(category__icontains='G').count()
+    numRent = posts.filter(sell_rent__icontains='S').count()
+    numSell = posts.filter(sell_rent__icontains='R').count()
+   # posts = posts.count();
     context = {
-        'title' : 'My Stats Page'
+        'numPosts': numPosts,
+        'numPostsUser' : numPostsUser,
+        'numHouse': numHouse,
+        'numApartment': numApartment,
+        'numGarage': numGarage,
+        'numRent': numRent,
+        'numSell': numSell,
+
     }
 
     return render(request,  'blog/stats.html', context)
