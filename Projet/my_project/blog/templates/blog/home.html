@@ -23,13 +23,16 @@
                     <!-- <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>-->
                 <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
             </div>
-            <h5 class="display-5">{{ post.title }}</h5>
-            <!-- <h5 class="display-5"><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> -->
-            <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
-            <h2 class="article-content">€ {{ post.price }}</h2>
-            <h5 class="article-content">{{ post.get_sell_rent_display }}</h5>
+            <div class="post-content">
+                <h6 class="post-content-category"><b>{{ post.get_category_display }}</b></h6>
+                <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
+                <h2 class="display-5"><b>€ {{ post.price }}</b></h2>
+                <h6 class="text-uppercase">{{ post.get_sell_rent_display }}</h6>
+                <br>
+                <p class="post-content-title"><small>{{ post.title }}</small></p>
+            </div>
         </div>
-        <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
+        <img class="rounded float-left ml-3" src="{{ post.image.url }}">
     </article>
 </a>
 {% endfor %}
@@ -71,11 +74,11 @@
                     <h6 class="font-weight-bold mb-3">Price</h6>
                     <div class="d-flex align-items-center mt-4 pb-1">
                         <div class="md-form md-outline my-0">
-                            <input class="form-control mb-0" name="priceMin" placeholder="$ min">
+                            <input class="form-control mb-0" name="priceMin" placeholder="€ min">
                         </div>
                         <p class="px-2 mb-0 text-muted"> - </p>
                         <div class="md-form md-outline my-0">
-                            <input class="form-control mb-0" name="priceMax" placeholder="$ max">
+                            <input class="form-control mb-0" name="priceMax" placeholder="€ max">
                         </div>
                     </div>
                     <h6 class="font-weight-bold mb-3">Place</h6>

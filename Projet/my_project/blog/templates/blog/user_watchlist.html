@@ -6,25 +6,27 @@
 <h2>{{ user }}'s watchlist</h2>
 
 {% for favorite in user_watchlist %}
+<a class="content-article" href="{% url 'post-detail' favorite.post.id %}">
     <article class="media content-section">
         <!-- show the profile picture of the authors next to the posts-->
         <img class="rounded-circle article-img" src="{{ favorite.post.author.profile.image.url }}">
 
         <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="{% url 'user-posts' favorite.post.author.username %}">{{ favorite.post.author }}</a>
                 <small class="text-muted">{{ favorite.post.date_posted|date:"F d, Y" }}</small>
             </div>
-            <h5 class="display-5"><a href="{% url 'post-detail' favorite.post.id %}">{{ favorite.post.title }}</a></h5>
-            <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
-            <h2 class="article-content">{{ favorite.post.price }} €</h2>
-            <h5 class="article-content">{{ favorite.post.get_sell_rent_display }}</h5>
-            <h5 class="article-content">{{ favorite.localisation }}</h5>
-            <h5 class="article-content">{{ favorite.get_category_display }}</h5>
-            <h5 class="article-content">{{ favorite.surface }}</h5>
+            <div class="post-content">
+                <h6 class="post-content-category"><b>{{ favorite.post.get_category_display }}</b></h6>
+                <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
+                <h3 class="display-5"><b>€ {{ favorite.post.price }}</b></h3>
+                <h6 class="text-uppercase">{{ favorite.post.get_sell_rent_display }}</h6>
+                <br>
+                <p class="post-content-title"><small>{{ favorite.post.title }}</small></p>
+            </div>
         </div>
-        <img class="rounded float-left ml-3 mr-3" src="{{ favorite.post.image.url }}">
+        <img class="rounded float-left ml-3" src="{{ favorite.post.image.url }}">
     </article>
+</a>
 {% empty %}
     <h5>Nothing to see here</h5>
 {% endfor %}

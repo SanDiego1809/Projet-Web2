@@ -33,7 +33,6 @@ class PostListView(ListView): #affichage de tous les posts (home.html)
     ordering = ['-date_posted'] #permet d'afficher les posts du plus récent au plus ancien (grâce au '-' devant date_posted)
     paginate_by = 5 #nombre de posts qui vont être affichés sur une page
 
-
 class UserPostListView(ListView): #affichage de tous les posts (home.html)
     model = Post
     template_name = 'blog/user_posts.html' # <app>/<model>_<viewtype>.html

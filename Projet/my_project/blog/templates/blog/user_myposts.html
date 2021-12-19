@@ -6,30 +6,41 @@
 <!-- début de la boucle for (for loop)-->
     {% for post in posts %}
         {% if post.author == user %}
-            <article class="media content-section">
-                <!-- show the profile picture of the aunthors next to the posts-->
-                <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-                <div class="media-body">
+        <a class="content-article" href="{% url 'post-detail' post.id %}">
+                <article class="media content-section">
+                    <!-- show the profile picture of the authors next to the posts-->
+                    <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 
-                    <div class="article-metadata">
-                        <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-                        <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                    <div class="media-body">
+                        {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
+                                <form action="{% url 'add-post-in-watchlist' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id" value="{{ post.id }}">
+                                <button class="btn btn-outline-warning m-1" id="btnFav1" type="submit" >
+                                    <i class="fa fa-star" style="font-size:20px;"></i>
+                                </button>
+                            </form>
+                        {% endif %}
+                        <div class="article-metadata">
+                                <!-- <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>-->
+                            <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                            <div>
+                                <a class="btn btn-success mt-1 mb-1" href="{% url 'post-update' post.id %}"><i class="fa fa-pencil-square-o"></i></a>
+                                <a class="btn btn-danger mt-1 mb-1" href="{% url 'post-delete' post.id %}"><i class="fa fa-trash"></i></a>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <h6 class="post-content-category"><b>{{ post.get_category_display }}</b></h6>
+                            <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
+                            <h2 class="display-5"><b>€ {{ post.price }}</b></h2>
+                            <h6 class="text-uppercase">{{ post.get_sell_rent_display }}</h6>
+                            <br>
+                            <p class="post-content-title"><small>{{ post.title }}</small></p>
+                        </div>
                     </div>
-                    <div>
-                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
-                        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
-                    </div>
-                    <h5 class="display-5"><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5>
-                    <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
-                     <h3 class="article-content">{{ post.price }} € </h3>
-                    <h5 class="article-content">{{ post.get_sell_rent_display }}</h5>
-                     <h5 class="article-content">{{ post.localisation }}</h5>
-                     <h5 class="article-content">{{ post.get_category_display }}</h5>
-                     <h5 class="article-content">{{ post.surface }}</h5>
-
-                </div>
-                <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
-            </article>
+                    <img class="rounded float-left ml-3" src="{{ post.image.url }}">
+                </article>
+            </a>
         {% endif %}
     {% endfor %}
     <!-- fin de la boucle for -->

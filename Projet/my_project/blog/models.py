@@ -41,7 +41,7 @@ class Post(models.Model): #creation d'un Post
         super(Post, self).save(*args, **kwargs)
 
         img = Image.open(self.image.path)
-        img2= Image.open(self.image2.path)
+        img2 = Image.open(self.image2.path)
         img3 = Image.open(self.image3.path)
 
         width, height = img.size

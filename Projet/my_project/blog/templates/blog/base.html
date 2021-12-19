@@ -37,11 +37,11 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <!-- Navbar partie de gauche -->
                 <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
-                    <a class="nav-item nav-link" href="{% url 'blog-map' %}">Map</a>
+                    <a class="nav-item nav-link" href="{% url 'blog-home' %}"><i class="fa fa-home"></i> Home</a>
+                    <a class="nav-item nav-link" href="{% url 'blog-map' %}"><i class="fa fa-map-marker"></i> Map</a>
                     {% if user.is_authenticated %}
-                        <a class="nav-item nav-link" href="{% url 'blog-stats' %}">My Stats</a>
-                        <a class="nav-item nav-link" href="{% url 'user-mypreferences' %}">My Preferences</a>
+                        <a class="nav-item nav-link" href="{% url 'blog-stats' %}"><i class="fa fa-bar-chart"></i> Stats</a>
+                        <a class="nav-item nav-link" href="{% url 'user-mypreferences' %}"><i class="fa fa-bell"></i> Notifications</a>
                     {% endif %}
 
                 </div>
@@ -51,22 +51,22 @@
                      <form class="d-flex" method=POST action="{% url 'place-search' %}">
                         {% csrf_token %}
                         <input class="form-control me-2" type="search" placeholder="Search for a place" aria-label="Search" name="search">
-                        <button class="btn btn-dark ml-1" type="submit">Search</button>
+                        <button class="btn btn-dark" type="submit"><i class="fa fa-search"></i></button>
                      </form>
                 </div>
 
                 <!-- Navbar partie droite -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
-                        <a class="nav-item nav-link" href="{% url 'post-create' %}">New post</a>
-                        <a class="nav-item nav-link" href="{% url 'user-watchlist' %}">Watchlist</a>
-                        <a class="nav-item nav-link" href="{% url 'user-myposts' %}">My posts</a>
-                        <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                        <a class="nav-item nav-link" href="{% url 'post-create' %}"> <i class="fa fa-plus"></i> New post</a>
+                        <a class="nav-item nav-link" href="{% url 'user-watchlist' %}"><i class="fa fa-star"></i> Watchlist</a>
+                        <a class="nav-item nav-link" href="{% url 'user-myposts' %}"> <i class="fa fa-user"></i> My posts</a>
+                        <a class="nav-item nav-link" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a>
                         <a class="nav-item nav-link" href="{% url 'profile' %}">
                             <img class="rounded-circle navbar-profile" src="{{ request.user.profile.image.url }}">
                         </a>
                     {% else %} <!-- si l'utilisateur n'est pas connecté -->
-                        <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'login' %}"> <i class="fa fa-sign-in"></i> Login</a>
                         <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
                     {% endif %}
                 </div>
@@ -110,6 +110,11 @@
 </script>
 
 <script src="https://use.fontawesome.com/96efc4366e.js"></script>
+<script src="https://use.fontawesome.com/a969cfc98a.js"></script>
+<script src="https://use.fontawesome.com/355214ab4a.js"></script>
+<script src="https://use.fontawesome.com/cd089ff891.js"></script>
+<script src="https://use.fontawesome.com/3820ab10a5.js"></script>
+<script src="https://use.fontawesome.com/d00235ec58.js"></script>
 
 <script crossorigin="anonymous"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
