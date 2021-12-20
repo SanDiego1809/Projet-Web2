@@ -26,10 +26,12 @@
         <h5 class="post-content-title"><b>{{ object.title }}</b></h5>
         <br>
         <h3 class="article-content">{{ object.price }} € </h3>
-        <h6 class="article-content"><b>Address : </b>{{ object.address }} <button class="btn btn-dark" data-target="#Modal" data-toggle="modal"><i class="fa fa-map"></i></button></h6>
+        <h6 class="article-content"><b>Address : </b>{{ object.address }} <button style="position: absolute; top: 11em; margin-left: 10px" class="btn btn-dark" data-target="#Modal" data-toggle="modal"><i class="fa fa-map"></i></button></h6>
         <h6 class="article-content"><b>Property type : </b>{{ object.get_category_display }} <i class="bi bi-dot"></i> {{ object.get_sell_rent_display }}</h6>
         <h6 class="article-content"><b>Surface : </b>{{ object.surface }} m²</h6>
-
+        {% if object.get_category_display != 'Garage' %}
+            <h6 class="article-content"><i class="fa fa-bed"></i> : {{ object.room_number }} room(s)</h6>
+        {% endif %}
         <!-- Modal -->
         <br>
         <div class="modal fade" id="Modal" role="dialog"

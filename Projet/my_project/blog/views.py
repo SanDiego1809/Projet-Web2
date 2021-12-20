@@ -33,6 +33,15 @@ class PostListView(ListView): #affichage de tous les posts (home.html)
     ordering = ['-date_posted'] #permet d'afficher les posts du plus récent au plus ancien (grâce au '-' devant date_posted)
     paginate_by = 5 #nombre de posts qui vont être affichés sur une page
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(PostListView, self).get_context_data(*args, **kwargs)
+        if(self.request.user.is_authenticated):
+            curr_user = User.objects.filter(username=self.request.user).get()  # utilisateur actuel
+            context['watchlist_list'] = curr_user.watchlist_list.all()
+        else:
+            context['watchlist_list'] = ''
+        return context
+
 class UserPostListView(ListView): #affichage de tous les posts (home.html)
     model = Post
     template_name = 'blog/user_posts.html' # <app>/<model>_<viewtype>.html
@@ -56,7 +65,7 @@ class PostDetailView(DetailView): #quand on clique sur un post, le post va être
 
 class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
     model = Post
-    fields = ['title', 'sell_rent', 'price', 'localisation','address', 'category', 'surface', 'content', 'image', 'image2', 'image3']
+    fields = ['title', 'sell_rent', 'price', 'localisation','address', 'category', 'room_number', 'surface', 'content', 'image', 'image2', 'image3']
 
     def form_valid(self, form):
         form.instance.author = self.request.user #auteur du poste = l'utilisateur actuellement connecté
@@ -64,7 +73,7 @@ class PostCreateView(LoginRequiredMixin, CreateView): #création d'un post
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):  # création d'un post
     model = Post
-    fields = ['title', 'sell_rent', 'price', 'localisation','address', 'category', 'surface', 'content', 'image', 'image2', 'image3']
+    fields = ['title', 'sell_rent', 'price', 'localisation','address', 'category', 'room_number', 'surface', 'content', 'image', 'image2', 'image3']
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # auteur du poste = l'utilisateur actuellement connecté
@@ -98,7 +107,6 @@ def place_search(request):# inspired by the video https://www.youtube.com/watch?
         search = request.POST['search']
         posts= Post.objects.filter(localisation__contains = search)
         return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts.order_by('-date_posted')})
-
     else:
         return render(request, 'blog/place_search.html', {})
 
@@ -117,7 +125,7 @@ def add_post_in_watchlist(request):
                 messages.success(request, 'Post successfully added to your watchlist !')
             else:
                 search_if_already_in_watchlist.delete()
-                messages.warning(request, 'This post is already in your watchlist...')
+                messages.warning(request, 'Post deleted from your watchlist...')
 
             return HttpResponseRedirect(reverse('blog-home')) #afin d'aller sur la page home
     else:
@@ -127,7 +135,7 @@ def add_post_in_watchlist(request):
 def watchlist(request):
     curr_user = User.objects.filter(username=request.user.username).get() #utilisateur actuel
     user_watchlist = curr_user.watchlist_list.all() #permet d'obtenir la watchlist de l'utilisateur en cours
-    return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist, 'title' : 'My watchlist'})
+    return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist.order_by('-id'), 'title' : 'My watchlist'})
 
 def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     qs = Post.objects.all()
@@ -223,7 +231,7 @@ def preferences_posts(request):
     if len(all_posts) > 0: #si il y'a des posts pouvant intéresser l'utilisateur
         messages.info(request, 'You have some interesting news !')
     else:
-        messages.warning(request, 'Nothing to see in your preferences...')
+        messages.warning(request, 'There is nothing matching with your preferences for now...')
         return redirect('blog-home')
 
     context = {

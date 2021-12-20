@@ -36,6 +36,7 @@ class Post(models.Model): #creation d'un Post
     author = models.ForeignKey(User, on_delete=models.CASCADE) #reférence à une autre classe (clé étrangère)
     #on_delete=models.CASCADE --> signifie que lors de la suppression d'un User, tous ses posts seront supprimés aussi
     number_views = models.IntegerField(default=0)
+    room_number = models.IntegerField(default=0, blank=True, null=True)
 
     def save(self, *args, **kwargs):  # method that runs after our model is saved --> méthode qui existe déjà mais on va la réécrire afin d'ajouter des fonctionnalités
         super(Post, self).save(*args, **kwargs)

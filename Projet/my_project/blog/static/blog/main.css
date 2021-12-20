@@ -41,10 +41,6 @@ ul {
   color: #8F8F8F;
 }
 
-.post-content-views{
-
-}
-
 .site-header .navbar-nav .nav-link {
   color: black;
 }
@@ -58,16 +54,21 @@ ul {
 }
 
 .navbar-profile {
-    width: 2em;
-    height: 2em;
+    width: 1.5em;
+    height: 1.5em;
 }
 
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
 }
 
-.content-article{
+.dropdown-menu{
+  background-color: #FFCD00;
+}
 
+.dropdown-item:hover{
+  color: white;
+  background-color: #FFCD00;
 }
 
 .content-article:hover{
@@ -99,6 +100,10 @@ a.article-title:hover {
 
 .article-content {
   white-space: pre-line;
+}
+
+.filter-section{
+  position: absolute;
 }
 
 .article-img {
