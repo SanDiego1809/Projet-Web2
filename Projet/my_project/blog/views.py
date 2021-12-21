@@ -3,11 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Watchlist
+from .models import Post, Watchlist, Messages
 from django.urls import reverse
 from django.contrib import messages
 from users.models import Profile
 from django.core.paginator import Paginator
+from django.db.models import Q
+import json
 
 # Fichier qui va contenir toutes les vues de notre application "blog"
 
@@ -239,3 +241,63 @@ def preferences_posts(request):
     }
 
     return render(request, 'blog/user_mypreferences.html', context)
+
+####################################### MESSAGES ##################################
+
+def message_home(request):
+
+    if(request.user.is_authenticated):
+        users_list = User.objects.all() #je récupère tous les utilisateurs inscrits
+        messages_list = {} #liste de messages
+        if request.method == 'GET' and 'u' in request.GET:
+            messages_list = Messages.objects.filter(Q(sender=request.user.id, receiver=request.GET['u']) | Q(sender=request.GET['u'], receiver=request.user.id))
+            messages_list = messages_list.order_by('message_datetime')
+            message_id = int(request.GET['u'])
+        else:
+            message_id = 0
+
+        context = {
+            'title' : 'Messages',
+            'users_list': users_list,
+            'messages_list': messages_list,
+            'message_id': message_id
+        }
+        #print(request.GET['u'] if request.method == 'GET' and 'u' in request.GET else 0)
+        return render(request,'blog/user_messages.html',context)
+    else:
+        return redirect('login')
+
+
+def receive_message(request):
+    messages_list = Messages.objects.filter(Q(id__gt=request.POST['data_id']),Q(sender=request.user.id, receiver=request.POST['message_id']) | Q(sender=request.POST['message_id'], receiver=request.user.id))
+    new_msgs = []
+    for message in messages_list:
+        data = {}
+        data['id'] = message.id
+        data['sender'] = message.sender.id
+        data['receiver'] = message.receiver.id
+        data['message_content'] = message.message_content
+        data['message_datetime'] = message.message_datetime.strftime("%b-%d-%Y %H:%M")
+        print(data)
+        new_msgs.append(data)
+    return HttpResponse(json.dumps(new_msgs), content_type="application/json")
+
+
+def message_sender(request):
+    result = {}
+    if request.method == 'POST':
+        u_from = User.objects.get(id=request.POST['sender'])
+        u_to = User.objects.get(id=request.POST['receiver'])
+        insert = Messages(sender=u_from, receiver=u_to, message_content=request.POST['message_content'])
+        try:
+            insert.save()
+            result['status'] = 'success'
+        except Exception as e:
+            result['status'] = 'failed'
+            result['mesg'] = e
+    else:
+        result['status'] = 'failed'
+
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+####################################################################################

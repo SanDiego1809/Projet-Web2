@@ -20,4 +20,7 @@ urlpatterns = [
     path('my_posts/', UserMyPostsListView.as_view(), name='user-myposts'), #permet de consulter "My posts"
     path('map/', views.map, name='blog-map'),
     path('my_preferences_posts/', views.preferences_posts, name='user-mypreferences'),
+    path('messages/', views.message_home, name='user-messages'),
+    path('messages/send/', views.message_sender, name='user-messages-sender'),
+    path('messages/receive/', views.receive_message, name='user-messages-receive'),
 ]

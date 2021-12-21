@@ -142,7 +142,14 @@ class Watchlist(models.Model):
     def __str__(self):
         return f"{self.post}, {self.user}"
 
+class Messages(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
+    message_content = models.TextField()
+    message_datetime = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.message_content
 
 
 
