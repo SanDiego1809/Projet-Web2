@@ -27,7 +27,6 @@ class Post(models.Model): #creation d'un Post
     category = models.CharField(default= 'H', max_length=10, choices=CATEGORIES)
     surface = models.DecimalField(default=0, max_digits= 8, decimal_places=2)
     #construction_year
-    #pieces = models.DecimalField(default=0, max_digits= 3)
     content = models.TextField()
     image = models.ImageField(default='defaultAnnounce.jpg', upload_to='announce_pics')
     image2 = models.ImageField(default='defaultAnnounce.jpg', upload_to='announce_pics')

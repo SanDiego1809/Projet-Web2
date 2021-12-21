@@ -203,7 +203,8 @@ def stats(request):
     numGarage = posts.filter(category__icontains='G').count()
     numRent = posts.filter(sell_rent__icontains='S').count()
     numSell = posts.filter(sell_rent__icontains='R').count()
-   # posts = posts.count();
+    postUser = Post.objects.filter(author=curr_user)
+
     context = {
         'numPosts': numPosts,
         'numPostsUser' : numPostsUser,
@@ -213,6 +214,7 @@ def stats(request):
         'numGarage': numGarage,
         'numRent': numRent,
         'numSell': numSell,
+        'postUser':postUser,
     }
 
     return render(request,  'blog/stats.html', context)
