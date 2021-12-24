@@ -106,7 +106,10 @@ def place_search(request):# inspired by the video https://www.youtube.com/watch?
     if request.method == 'POST':
         search = request.POST['search']
         posts= Post.objects.filter(localisation__contains = search)
-        return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts.order_by('-date_posted')})
+        if posts.exists():
+            return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts.order_by('-date_posted')})
+        else:
+            return render(request, 'blog/place_search2.html', {})
     else:
         return render(request, 'blog/place_search.html', {})
 
@@ -169,14 +172,8 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     if surfaceMax != '' and surfaceMax is not None:
         qs = qs.filter(surface__lt=surfaceMax)
 
-    # Pagination found in https://docs.djangoproject.com/en/3.2/topics/pagination/
-    paginator = Paginator(Post.objects.all(), 5)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
     context = {
         'queryset': qs.order_by('-date_posted'),
-        'page_obj': page_obj
     }
     return render(request, 'blog/filter.html',context)
 
