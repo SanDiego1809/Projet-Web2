@@ -189,10 +189,6 @@ def map(request):
     }
     return render(request, 'blog/map.html', context)
 
-def about(request):
-    # return HttpResponse('<h1>About Home</h1>')
-    return render(request,  'blog/about.html', {'title' : 'My About Page'})
-
 def stats(request):
     numPosts = Post.objects.all().count()
     curr_user = User.objects.filter(username=request.user.username).get()  # utilisateur actuel
