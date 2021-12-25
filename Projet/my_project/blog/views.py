@@ -173,9 +173,13 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
         post = post.filter(surface__lt=surfaceMax)
 
     context = {
-        'post': post.order_by('-date_posted'),
+        'posts': post.order_by('-date_posted'),
     }
-    return render(request, 'blog/filter.html',context)
+    if post.exists():
+        return render(request, 'blog/filter.html', context)
+    else:
+        return render(request, 'blog/place_search2.html', {})
+
 
 
 def map(request):
@@ -192,7 +196,7 @@ def about(request):
 def stats(request):
     numPosts = Post.objects.all().count()
     curr_user = User.objects.filter(username=request.user.username).get()  # utilisateur actuel
-    numWatchlist = curr_user.watchlist_list.all().count() # permet d'obtenir la watchlist de l'utilisateur en cours
+    numWatchlist = curr_user.watchlist_list.all().count() #permet d'obtenir la watchlist de l'utilisateur en cours
     numPostsUser = Post.objects.filter(author=curr_user).count()
     posts = Post.objects.all()
     numHouse = posts.filter(category__icontains='H').count()
