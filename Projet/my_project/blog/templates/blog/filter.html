@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Filters</h1>
 <!-- début de la boucle for (for loop)-->
-    {% for post in queryset %}
+    {% for post in post %}
         <a class="content-article" href="{% url 'post-detail' post.id %}">
             <article class="media content-section">
                 <!-- show the profile picture of the authors next to the posts-->

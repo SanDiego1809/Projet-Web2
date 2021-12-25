@@ -141,7 +141,7 @@ def watchlist(request):
     return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist.order_by('-id'), 'title' : 'My watchlist'})
 
 def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
-    qs = Post.objects.all()
+    post = Post.objects.all()
 
     localisation = request.GET.get('localisation')
     priceMin = request.GET.get('priceMin')
@@ -152,28 +152,28 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     surfaceMax = request.GET.get('surfaceMax')
 
     if localisation != '' and localisation is not None:
-        qs = qs.filter(localisation__icontains=localisation)
+        post = post.filter(localisation__icontains=localisation)
 
     if priceMin != '' and priceMin is not None:
-        qs = qs.filter(price__gte=priceMin)
+        post = post.filter(price__gte=priceMin)
 
     if priceMax != '' and priceMax is not None:
-        qs = qs.filter(price__lt=priceMax)
+        post = post.filter(price__lt=priceMax)
 
     if sellOrRent != '' and sellOrRent is not None and sellOrRent != 'Choose an option':
-        qs = qs.filter(sell_rent__icontains=sellOrRent)
+        post = post.filter(sell_rent__icontains=sellOrRent)
 
     if category != '' and category is not None and category != 'Choose an option':
-        qs = qs.filter(category__icontains=category)
+        post = post.filter(category__icontains=category)
 
     if surfaceMin != '' and surfaceMin is not None:
-        qs = qs.filter(surface__gte=surfaceMin)
+        post = post.filter(surface__gte=surfaceMin)
 
     if surfaceMax != '' and surfaceMax is not None:
-        qs = qs.filter(surface__lt=surfaceMax)
+        post = post.filter(surface__lt=surfaceMax)
 
     context = {
-        'queryset': qs.order_by('-date_posted'),
+        'post': post.order_by('-date_posted'),
     }
     return render(request, 'blog/filter.html',context)
 
