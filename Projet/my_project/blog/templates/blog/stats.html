@@ -48,14 +48,14 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         <table class="table">
             <thead>
               <tr>
-                <th class="bg-danger text-white" >Title</th>
-                <th class="bg-info text-white" >Number of views</th>
+                <th class="bg-danger text-white">Title</th>
+                <th class="bg-info text-white">Views</th>
               </tr>
             </thead>
             {% for post in postUser%}
               <tr>
-                <th class="table-danger">{{ post }}</td>
-                <td class="table-info">{{ post.number_views }}</td>
+                <td class="table-danger">{{ post.title }}</td>
+                <td class="table-info">{{ post.number_views }} <i class="fa fa-eye"></i></td>
               </tr>
             {% endfor %}
         </table>

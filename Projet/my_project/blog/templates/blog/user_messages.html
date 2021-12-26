@@ -11,9 +11,10 @@
             <div class="row h-100">
                 <div class="col-md-4 border-right h-100 border-dark">
                     <div class="list-group" id='user-list'>
+                        <!--LISTER LES UTILISATEURS A GAUCHE-->
                         {% for users in users_list %}
-                            {% if users.id != user.id %}
-                            <a class="list-group-item {% if users.id != message_id %} bg-light {% else %} bg-warning {% endif %} text-dark border-dark" href="{% url 'user-messages' %}?u={{ users.id }}">
+                            {% if users.id != user.id %} <!--POUR NE PAS AFFICHER L'UTILISATEUR CONNECTE-->
+                            <a class="list-group-item {% if users.id != message_id %} bg-light {% else %} bg-warning {% endif %} text-dark border-dark" href="{% url 'user-messages' %}?user={{ users.id }}">
                                 <div>
                                     <p>{{ users.username }}</p>
                                 </div>
@@ -27,18 +28,18 @@
                         <div class="no-user-selected">
                             <p><small class="text-muted">Please select the user you want to start a conversation with.</small></p>
                         </div>
-                    {% else %}
+                    {% else %} <!-- SI UN ITLISATEUR EST SELECTIONNE -->
                     <div id="messages-content-field" class="h-100">
                         <div class="messages-content">
                             {% for message in messages_list %}
-                                {% if message.sender == user %}
+                                {% if message.sender == user %} <!--MES MESSAGES COTE DROIT-->
                                     <div class="p-2 w-100 d-flex justify-content-end">
                                         <div class="message-zone  ml-2 mb-2 bg-warning text-dark rounded" data-id="{{ message.id }}">
                                             <p>{{ message.message_content }}</p>
                                             <div class="d-flex justify-content-between"><small> {{message.message_datetime|date:"M-d-Y H:i"}}</small></div>
                                         </div>
                                     </div>
-                                {% else %}
+                                {% else %} <!--MESSAGES DU DESTINATAIRES COTE GAUCHE -->
                                     <div class="p-2 w-100 d-flex justify-content-start">
                                         <div class="message-zone mr-2 mb-2 bg-dark text-white rounded" data-id="{{ message.id }}">
                                             <p> {{ message.message_content }} </p>
@@ -51,6 +52,7 @@
                         <div class="messages-to-send border-top p-2 border-dark">
                             <div class="w-100 h-100">
                                 <form action="" id="message-submit" class="h-100 d-flex">
+                                    {% csrf_token %}
                                     <input type="hidden" name="sender" value="{{ user.id }}">
                                     <input type="hidden" name="receiver" value="{{ message_id }}">
                                     <div class="col-md-10 h-100">
@@ -68,100 +70,27 @@
     </div>
 </div>
 
-
 {% endblock content %}
 
 {% block footer %}
 <script>
     $(function() {
-        if ($('.message-zone:last').length > 0) {
-            $('.messages-content').animate({
-                scrollTop: $('.message-zone:last').offset().top
-            }, 'fast')
-        }
-        $('#message-submit').submit(function(e) {
-            e.preventDefault()
-            start_loader()
+        $('#message-submit').submit(function(event) { //récupère l'id du form
+            event.preventDefault() //Prevent a link from opening the URL
             $.ajax({
-                headers: {
-                    "X-CSRFToken": '{{csrf_token}}'
-                },
                 url: "{% url 'user-messages-sender' %}",
-                method: "POST",
+                method: "POST", //on définit la méthode du formulaire
                 data: $(this).serialize(),
                 dataType: "json",
-                error: errorMessage => {
-                    console.log(errorMessage)
-                },
                 success: function(result) {
-                    if (typeof result == 'object' && result.status == 'success') {
-                        location.reload()
-                    } else {
-                        console.log(result)
+                    if (result.check === 'success')
+                    {
+                        location.reload() //reload la page/le document en cours
                     }
                 }
             })
         })
-
-        refresh_messages()
-        setInterval(() => {
-            refresh_messages()
-        }, 2500)
     })
-
-    //-----------------------REFRESH LES MESSAGES AUTOMATIQUEMENT (A POTENTIELLEMENT SUPPRIMER)--------------------------//
-    function refresh_messages() {
-        var data_id = 0
-        if ($('.message-zone').length > 0)
-            data_id = $('.message-zone:last').attr('data-id')
-
-        $.ajax({
-            headers: {
-                "X-CSRFToken": '{{ csrf_token }}'
-            },
-            url: "{% url 'user-messages-receive' %}",
-            method: "POST",
-            data: {
-                data_id: data_id,
-                user_id: '{{ user.id }}',
-                message_id: '{{ message_id }}'
-            },
-            dataType: 'json',
-            error: errorMessage => {
-                console.log(errorMessage)
-            },
-            success: function(result) {
-                if (Object.keys(result).length > 0) {
-                    Object.keys(result).map(key => {
-                        if (result[key].id.sender == '{{ user.id }}')
-                        {
-                            var conv_zone = '<div class="p-2 w-100 d-flex justify-content-end">' +
-                                '<div class="message-zone  ml-2 mb-2 bg-primary text-light rounded" data-id="' + result[key].id + '">' +
-                                '<p>' + result[key].message_content + '</p>' +
-                                ' <div class="d-flex justify-content-between"><small>You</small> <small>' + " " + '</small></div>' +
-                                ' </div>' +
-                                ' </div>';
-                        }
-                        else {
-                            conv_zone = '<div class="p-2 w-100 d-flex justify-content-start">' +
-                                '<div class="message-zone mr-2 mb-2 bg-light text-dark rounded"  data-id="' + result[key].id + '">' +
-                                ' <p>' + result[key].message_content + '</p>' +
-                                ' <div class="d-flex justify-content-between"><small>Sender</small> <small>' + " " + '</small></div>' +
-                                '</div>' +
-                                '</div>';
-                        }
-                        // console.log(bubble)
-                        $('.messages-content').append(conv_zone)
-                        $('.messages-content').animate({
-                            scrollTop: $('.message-zone:last').offset().top * 1000
-                        }, 'fast')
-                    })
-                }
-            }
-            //-----------------------REFRESH LES MESSAGES AUTOMATIQUEMENT--------------------------//
-        })
-
-    }
 </script>
 
 {% endblock %}

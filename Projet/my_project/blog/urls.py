@@ -22,5 +22,4 @@ urlpatterns = [
     path('my_preferences_posts/', views.preferences_posts, name='user-mypreferences'),
     path('messages/', views.message_home, name='user-messages'),
     path('messages/send/', views.message_sender, name='user-messages-sender'),
-    path('messages/receive/', views.receive_message, name='user-messages-receive'),
 ]

@@ -4,36 +4,43 @@
 
 <!-- début de la boucle for (for loop)-->
     {% for post in posts %}
-        <article class="media content-section">
-            <!-- show the profile picture of the authors next to the posts-->
-            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-            <div class="media-body">
-                {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
-                    <form method="POST"  action="{% url 'add-post-in-watchlist' %}">
-                      {% csrf_token %}
-                      <input hidden type="text" value="{{ post.id }}" name="post_id">
-                        <button id="btnFav1" class="btn btn-outline-warning m-1" type="submit">
-                            <i class="bi bi-star-fill"></i>
-                        </button>
-                    </form>
-                {% endif %}
 
+<a class="content-article" href="{% url 'post-detail' post.id %}">
+    <article class="media content-section">
+        <!-- show the profile picture of the authors next to the posts-->
+        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
 
-                <div class="article-metadata">
-                    <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-                    <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-                </div>
-                <h5 class="display-5"><a  href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5>
-                <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
-                <h2 class="article-content">{{ post.price }} €</h2>
-                <h5 class="article-content">{{ post.get_sell_rent_display }}</h5>
-                <h5 class="article-content">{{ post.localisation }}</h5>
-                <h5 class="article-content">{{ post.get_category_display }}</h5>
-                <h5 class="article-content">{{ post.surface }}</h5>
+        <div class="media-body">
+            {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
+                    <form action="{% url 'add-post-in-watchlist' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <button class="btn btn-outline-warning m-1" id="btnFav1" type="submit" >
+                        <i class="fa fa-star" style="font-size:20px;"></i>
+                        {% for favorite in watchlist_list %}
+                            {% if post.id == favorite.post.id %}
+                                <small>1</small>
+                            {% endif %}
+                        {% endfor %}
+                    </button>
+                </form>
+            {% endif %}
+            <div class="article-metadata">
+                    <!-- <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>-->
+                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
             </div>
-            <img class="rounded float-left ml-3 mr-3" src="{{ post.image.url }}">
-        </article>
-
+            <div class="post-content">
+                <h6 class="post-content-category"><b>{{ post.get_category_display }}</b></h6>
+                <!-- post.id sert à identier la pk (voir urls.py -> urlpatterns) -->
+                <h2 class="display-5"><b>€ {{ post.price }}</b></h2>
+                <h6 class="text-uppercase">{{ post.get_sell_rent_display }}</h6>
+                <br>
+                <p class="post-content-title"><small>{{ post.title }}</small></p>
+            </div>
+        </div>
+        <img class="rounded float-left ml-3" src="{{ post.image.url }}">
+    </article>
+</a>
     {% endfor %}
 <!-- fin de la boucle for -->
 
