@@ -1,0 +1,96 @@
+{% extends "blog/base.html" %}
+{% block content %}
+
+{% load static %}
+
+<h1>Messages</h1>
+
+<div class="messages-container">
+    <div class="card bg-light h-100 border-dark">
+        <div class="card-body h-100">
+            <div class="row h-100">
+                <div class="col-md-4 border-right h-100 border-dark">
+                    <div class="list-group" id='user-list'>
+                        <!--LISTER LES UTILISATEURS A GAUCHE-->
+                        {% for users in users_list %}
+                            {% if users.id != user.id %} <!--POUR NE PAS AFFICHER L'UTILISATEUR CONNECTE-->
+                            <a class="list-group-item {% if users.id != message_id %} bg-light {% else %} bg-warning {% endif %} text-dark border-dark" href="{% url 'user-messages' %}?user={{ users.id }}">
+                                <div>
+                                    <p>{{ users.username }}</p>
+                                </div>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-8 h-100">
+                    {% if message_id == 0 %} <!-- SI AUCUN UTILISATEUR SELECTIONNé -->
+                        <div class="no-user-selected">
+                            <p><small class="text-muted">Please select the user you want to start a conversation with.</small></p>
+                        </div>
+                    {% else %} <!-- SI UN ITLISATEUR EST SELECTIONNE -->
+                    <div id="messages-content-field" class="h-100">
+                        <div class="messages-content">
+                            {% for message in messages_list %}
+                                {% if message.sender == user %} <!--MES MESSAGES COTE DROIT-->
+                                    <div class="p-2 w-100 d-flex justify-content-end">
+                                        <div class="message-zone  ml-2 mb-2 bg-warning text-dark rounded" data-id="{{ message.id }}">
+                                            <p>{{ message.message_content }}</p>
+                                            <div class="d-flex justify-content-between"><small> {{message.message_datetime|date:"M-d-Y H:i"}}</small></div>
+                                        </div>
+                                    </div>
+                                {% else %} <!--MESSAGES DU DESTINATAIRES COTE GAUCHE -->
+                                    <div class="p-2 w-100 d-flex justify-content-start">
+                                        <div class="message-zone mr-2 mb-2 bg-dark text-white rounded" data-id="{{ message.id }}">
+                                            <p> {{ message.message_content }} </p>
+                                            <div class=" d-flex justify-content-between"><small> {{ message.message_datetime|date:"M-d-Y H:i"}} </small></div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="messages-to-send border-top p-2 border-dark">
+                            <div class="w-100 h-100">
+                                <form action="" id="message-submit" class="h-100 d-flex">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="sender" value="{{ user.id }}">
+                                    <input type="hidden" name="receiver" value="{{ message_id }}">
+                                    <div class="col-md-10 h-100">
+                                        <textarea name="message_content" id="" class="h-100 w-100 form-control" placeholder="Write something..."></textarea>
+                                    </div>
+                                    <button class="send-button btn btn-warning"><i class="fa fa-paper-plane"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block footer %}
+<script>
+    $(function() {
+        $('#message-submit').submit(function(event) { //récupère l'id du form
+            event.preventDefault() //Prevent a link from opening the URL
+            $.ajax({
+                url: "{% url 'user-messages-sender' %}",
+                method: "POST", //on définit la méthode du formulaire
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(result) {
+                    if (result.check === 'success')
+                    {
+                        location.reload() //reload la page/le document en cours
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+{% endblock %}

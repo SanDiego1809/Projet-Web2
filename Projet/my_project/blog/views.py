@@ -238,3 +238,46 @@ def preferences_posts(request):
     }
 
     return render(request, 'blog/user_mypreferences.html', context)
+
+####################################### MESSAGES ##################################
+
+def message_home(request):
+
+    if(request.user.is_authenticated): #si l'utilisateur est connecté
+        users_list = User.objects.all() #je récupère tous les utilisateurs inscrits
+        messages_list = {} #liste de messages
+        if request.method == 'GET' and 'user' in request.GET:
+            messages_list = Messages.objects.filter(Q(sender=request.user.id, receiver=request.GET['user'])
+                                                    | Q(sender=request.GET['user'], receiver=request.user.id)) #pour afficher les messages reçus et envoyés
+            messages_list = messages_list.order_by('message_datetime')
+            message_id = int(request.GET['user'])
+        else:
+            message_id = 0 #aucun utilisateur sélectionné
+
+        context = {
+            'title' : 'Messages',
+            'users_list': users_list,
+            'messages_list': messages_list,
+            'message_id': message_id
+        }
+        return render(request,'blog/user_messages.html',context)
+    else: #si l'utilisateur n'est pas connecté --> redirect vers la page login
+        return redirect('login')
+
+def message_sender(request):
+    message_information = {}
+    if request.method == 'POST':
+        sender = User.objects.get(id=request.POST['sender']) #je récupère l'expéditeur
+        receiver = User.objects.get(id=request.POST['receiver']) #je récupère le destinataire
+        message = Messages(sender=sender, receiver=receiver, message_content=request.POST['message_content'])
+        try: #on essaie d'enregistrer les modifications, si OK alors status == success
+            message.save()
+            message_information['check'] = 'success'
+        except Exception as e:
+            message_information['check'] = 'failed'
+    else:
+        message_information['check'] = 'failed'
+
+    return HttpResponse(json.dumps(message_information), content_type="application/json")
+
+####################################################################################
