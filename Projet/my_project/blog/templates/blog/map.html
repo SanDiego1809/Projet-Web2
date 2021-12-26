@@ -62,6 +62,7 @@
                                                            "<a href= {% url 'post-detail' address.id %}>{{ address.title }}</a>"))
                 .addTo(map);
         {% endfor %}
+
         // Crée un marker de couleur différente lorsqu'une rue est cherchée
         const geocoder = new MapboxGeocoder(
         {
@@ -72,8 +73,9 @@
              },
             mapboxgl: mapboxgl
         });
+        map.addControl(geocoder);//la barre de recherche
 
-        map.addControl(geocoder);
+
         //mapControl qui permet de localiser la position gps de l'appareil
         //d'autres fonctionnalités étaient possibles comme mettre une flèche pour la direction
         //ou bien de pouvoir déplacer le pointeur si on se déplace

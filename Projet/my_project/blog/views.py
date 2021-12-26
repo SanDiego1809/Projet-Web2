@@ -3,13 +3,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Watchlist, Messages
+from .models import Post, Watchlist
 from django.urls import reverse
 from django.contrib import messages
 from users.models import Profile
 from django.core.paginator import Paginator
-from django.db.models import Q
-import json
 
 # Fichier qui va contenir toutes les vues de notre application "blog"
 
@@ -108,7 +106,10 @@ def place_search(request):# inspired by the video https://www.youtube.com/watch?
     if request.method == 'POST':
         search = request.POST['search']
         posts= Post.objects.filter(localisation__contains = search)
-        return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts.order_by('-date_posted')})
+        if posts.exists():
+            return render(request, 'blog/place_search.html', {'search' : search, 'posts':posts.order_by('-date_posted')})
+        else:
+            return render(request, 'blog/place_search2.html', {})
     else:
         return render(request, 'blog/place_search.html', {})
 
@@ -140,7 +141,7 @@ def watchlist(request):
     return render(request, 'blog/user_watchlist.html',{'user_watchlist' : user_watchlist.order_by('-id'), 'title' : 'My watchlist'})
 
 def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
-    qs = Post.objects.all()
+    post = Post.objects.all()
 
     localisation = request.GET.get('localisation')
     priceMin = request.GET.get('priceMin')
@@ -151,36 +152,34 @@ def filter(request): #inspired by https://www.youtube.com/watch?v=vU0VeFN-abU
     surfaceMax = request.GET.get('surfaceMax')
 
     if localisation != '' and localisation is not None:
-        qs = qs.filter(localisation__icontains=localisation)
+        post = post.filter(localisation__icontains=localisation)
 
     if priceMin != '' and priceMin is not None:
-        qs = qs.filter(price__gte=priceMin)
+        post = post.filter(price__gte=priceMin)
 
     if priceMax != '' and priceMax is not None:
-        qs = qs.filter(price__lt=priceMax)
+        post = post.filter(price__lt=priceMax)
 
     if sellOrRent != '' and sellOrRent is not None and sellOrRent != 'Choose an option':
-        qs = qs.filter(sell_rent__icontains=sellOrRent)
+        post = post.filter(sell_rent__icontains=sellOrRent)
 
     if category != '' and category is not None and category != 'Choose an option':
-        qs = qs.filter(category__icontains=category)
+        post = post.filter(category__icontains=category)
 
     if surfaceMin != '' and surfaceMin is not None:
-        qs = qs.filter(surface__gte=surfaceMin)
+        post = post.filter(surface__gte=surfaceMin)
 
     if surfaceMax != '' and surfaceMax is not None:
-        qs = qs.filter(surface__lt=surfaceMax)
-
-    # Pagination found in https://docs.djangoproject.com/en/3.2/topics/pagination/
-    paginator = Paginator(Post.objects.all(), 5)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+        post = post.filter(surface__lt=surfaceMax)
 
     context = {
-        'queryset': qs.order_by('-date_posted'),
-        'page_obj': page_obj
+        'posts': post.order_by('-date_posted'),
     }
-    return render(request, 'blog/filter.html',context)
+    if post.exists():
+        return render(request, 'blog/filter.html', context)
+    else:
+        return render(request, 'blog/place_search2.html', {})
+
 
 
 def map(request):
@@ -190,14 +189,10 @@ def map(request):
     }
     return render(request, 'blog/map.html', context)
 
-def about(request):
-    # return HttpResponse('<h1>About Home</h1>')
-    return render(request,  'blog/about.html', {'title' : 'My About Page'})
-
 def stats(request):
     numPosts = Post.objects.all().count()
     curr_user = User.objects.filter(username=request.user.username).get()  # utilisateur actuel
-    numWatchlist = curr_user.watchlist_list.all().count() # permet d'obtenir la watchlist de l'utilisateur en cours
+    numWatchlist = curr_user.watchlist_list.all().count() #permet d'obtenir la watchlist de l'utilisateur en cours
     numPostsUser = Post.objects.filter(author=curr_user).count()
     posts = Post.objects.all()
     numHouse = posts.filter(category__icontains='H').count()
