@@ -3,11 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Watchlist
+from .models import Post, Watchlist, Messages
 from django.urls import reverse
 from django.contrib import messages
 from users.models import Profile
 from django.core.paginator import Paginator
+from django.db.models import Q
+import json
 
 # Fichier qui va contenir toutes les vues de notre application "blog"
 

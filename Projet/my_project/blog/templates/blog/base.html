@@ -56,7 +56,7 @@
                     {% if user.is_authenticated %} <!-- si l'utilisateur est connecté -->
                         <a class="nav-item nav-link" href="{% url 'post-create' %}"> <i class="fa fa-plus"></i> New post</a>
                         <a class="nav-item nav-link" href="{% url 'user-watchlist' %}"><i class="fa fa-star"></i> Watchlist</a>
-                        <a class="nav-item nav-link" href="#"><i class="fa fa-envelope"></i> Messages</a>
+                        <a class="nav-item nav-link" href="{% url 'user-messages' %}"><i class="fa fa-envelope"></i> Messages</a>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <img class="rounded-circle navbar-profile" src="{{ request.user.profile.image.url }}">
@@ -120,5 +120,9 @@
 <script crossorigin="anonymous"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </body>
+{% block footer %}{% endblock footer %}
 </html>
